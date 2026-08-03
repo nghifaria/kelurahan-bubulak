@@ -37,7 +37,7 @@ export default function AjukanSuratPage() {
 
   const selectedService = serviceTypes.find((s) => s.id === formData.serviceTypeId);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -53,13 +53,24 @@ export default function AjukanSuratPage() {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const generatedResi = `BBL-${dateStr}-${randomNum}X`;
-      setSubmittedResi(generatedResi);
-      setIsSubmitting(false);
-    }, 800);
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const generatedResi = `BBL-${dateStr}-${randomNum}X`;
+
+    // Persist to INSForge DB
+    const { createSubmissionInDb } = await import("@/lib/services");
+    await createSubmissionInDb({
+      ticketNumber: generatedResi,
+      citizenName: formData.citizenName,
+      citizenNik: formData.citizenNik,
+      citizenWhatsapp: formData.citizenWhatsapp,
+      citizenEmail: formData.citizenEmail,
+      serviceTypeId: formData.serviceTypeId,
+      notes: formData.notes,
+    });
+
+    setSubmittedResi(generatedResi);
+    setIsSubmitting(false);
   };
 
   const handleCopyResi = () => {

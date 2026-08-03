@@ -35,7 +35,7 @@ export default function LaporanPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -46,13 +46,23 @@ export default function LaporanPage() {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const generatedResi = `LAP-${dateStr}-${randomNum}A`;
-      setSubmittedResi(generatedResi);
-      setIsSubmitting(false);
-    }, 800);
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const generatedResi = `LAP-${dateStr}-${randomNum}A`;
+
+    // Persist to INSForge DB
+    const { createComplaintInDb } = await import("@/lib/services");
+    await createComplaintInDb({
+      ticketNumber: generatedResi,
+      title: formData.title,
+      rtRwLocation: formData.rtRwLocation,
+      description: formData.description,
+      reporterName: formData.isAnonymous ? "Anonim" : formData.reporterName,
+      reporterWhatsapp: formData.reporterWhatsapp,
+    });
+
+    setSubmittedResi(generatedResi);
+    setIsSubmitting(false);
   };
 
   const handleCopyResi = () => {

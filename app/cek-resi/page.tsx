@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -35,6 +35,9 @@ function CekResiContent() {
 
   const [query, setQuery] = useState(resiFromUrl);
   const [activeSearch, setActiveSearch] = useState(resiFromUrl);
+  const [foundSubmission, setFoundSubmission] = useState<SubmissionTicket | null>(null);
+  const [foundComplaint, setFoundComplaint] = useState<ComplaintTicket | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (resiFromUrl) {
@@ -43,22 +46,33 @@ function CekResiContent() {
     }
   }, [resiFromUrl]);
 
-  const foundSubmission = useMemo(() => {
-    if (!activeSearch.trim()) return null;
-    const q = activeSearch.trim().toLowerCase();
-    return dummySubmissions.find(
-      (item) =>
-        item.ticketNumber.toLowerCase() === q ||
-        item.citizenNik.toLowerCase() === q
-    );
-  }, [activeSearch]);
+  useEffect(() => {
+    if (!activeSearch.trim()) {
+      setFoundSubmission(null);
+      setFoundComplaint(null);
+      return;
+    }
 
-  const foundComplaint = useMemo(() => {
-    if (!activeSearch.trim()) return null;
-    const q = activeSearch.trim().toLowerCase();
-    return dummyComplaints.find(
-      (item) => item.ticketNumber.toLowerCase() === q
-    );
+    let isMounted = true;
+    setIsLoading(true);
+
+    async function doSearch() {
+      const { fetchSubmissionByTicketOrNik, fetchComplaintByTicket } = await import("@/lib/services");
+      const sub = await fetchSubmissionByTicketOrNik(activeSearch);
+      const comp = await fetchComplaintByTicket(activeSearch);
+
+      if (isMounted) {
+        setFoundSubmission(sub);
+        setFoundComplaint(comp);
+        setIsLoading(false);
+      }
+    }
+
+    doSearch();
+
+    return () => {
+      isMounted = false;
+    };
   }, [activeSearch]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {

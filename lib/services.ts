@@ -457,6 +457,7 @@ export async function updateNewsInDb(
       category: newsData.category,
       summary: newsData.summary,
       content: newsData.content,
+      is_published: true,
     };
     if (newsData.coverImageUrl) {
       payload.cover_image_url = newsData.coverImageUrl;
@@ -947,6 +948,73 @@ export async function updateSiteSettingsInDb(settingsData: {
     return { data: null, error: err };
   }
 }
+
+// ===================================================
+// ACHIEVEMENTS SERVICES
+// ===================================================
+
+export async function createAchievementInDb(achievementData: {
+  title: string;
+  year: number;
+  description: string;
+  photoUrl?: string;
+}) {
+  try {
+    const { data, error } = await insforge.database.from("achievements").insert([
+      {
+        title: achievementData.title,
+        year: achievementData.year,
+        description: achievementData.description,
+        photo_url: achievementData.photoUrl || null,
+      },
+    ]);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function updateAchievementInDb(
+  id: string,
+  achievementData: {
+    title: string;
+    year: number;
+    description: string;
+    photoUrl?: string;
+  }
+) {
+  try {
+    const payload: any = {
+      title: achievementData.title,
+      year: achievementData.year,
+      description: achievementData.description,
+    };
+    if (achievementData.photoUrl) {
+      payload.photo_url = achievementData.photoUrl;
+    }
+
+    const { data, error } = await insforge.database
+      .from("achievements")
+      .update(payload)
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function deleteAchievementInDb(id: string) {
+  try {
+    const { data, error } = await insforge.database
+      .from("achievements")
+      .delete()
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
 
 
 

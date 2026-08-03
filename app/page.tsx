@@ -1,4 +1,5 @@
-"use client";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 import Link from "next/link";
 import {
@@ -13,14 +14,14 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  operationalHours,
-  quickActions,
-  latestNews,
-  siteSettings,
-} from "@/lib/data";
+import { operationalHours, quickActions } from "@/lib/data";
+import { fetchNews, fetchSiteSettings } from "@/lib/services";
 
-function getIsOpen(): { isOpen: boolean; currentDay: string; todayHours: (typeof operationalHours)[0] | null } {
+function getIsOpen(): {
+  isOpen: boolean;
+  currentDay: string;
+  todayHours: (typeof operationalHours)[0] | null;
+} {
   const now = new Date();
   const dayIndex = now.getDay();
   const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -48,6 +49,7 @@ function getIsOpen(): { isOpen: boolean; currentDay: string; todayHours: (typeof
 }
 
 function formatDate(dateString: string): string {
+  if (!dateString) return "";
   return new Date(dateString).toLocaleDateString("id-ID", {
     day: "numeric",
     month: "long",
@@ -55,8 +57,10 @@ function formatDate(dateString: string): string {
   });
 }
 
-export default function HomePage() {
+export default async function HomePage() {
   const { isOpen, currentDay, todayHours } = getIsOpen();
+  const siteSettingsData = await fetchSiteSettings();
+  const newsItems = await fetchNews();
 
   return (
     <div className="flex flex-col">
@@ -73,7 +77,7 @@ export default function HomePage() {
             style={{
               backgroundImage:
                 "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)",
-              backgroundSize: "40px 40px",
+              backgroundSize: "24px 24px",
             }}
           />
         </div>
@@ -90,7 +94,7 @@ export default function HomePage() {
             <h1 className="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
               Selamat Datang di{" "}
               <span className="bg-gradient-to-r from-emerald-200 to-amber-200 bg-clip-text text-transparent">
-                Kelurahan Bubulak
+                {siteSettingsData.villageName}
               </span>
             </h1>
 
@@ -128,7 +132,7 @@ export default function HomePage() {
                   Lurah Bubulak
                 </p>
                 <p className="text-base font-semibold text-white">
-                  {siteSettings.lurahName}
+                  {siteSettingsData.lurahName}
                 </p>
               </div>
             </div>
@@ -222,35 +226,39 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* QUICK ACTION GRID (Pintas Menu) */}
+      {/* QUICK ACTION GRID */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-            Apa yang Anda Butuhkan?
+          <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+            Pintas Menu Utama
           </h2>
-          <p className="mt-2 text-lg text-slate-600">
-            Pilih menu di bawah untuk akses cepat
+          <p className="mt-2 text-base text-slate-600">
+            Akses langsung layanan publik dan informasi kelurahan paling sering dicari
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
           {quickActions.map((action) => (
-            <Link key={action.href} href={action.href} className="group">
-              <Card className="h-full border-2 border-transparent transition-all duration-300 hover:border-emerald-300 hover:shadow-xl hover:-translate-y-1">
-                <CardContent className="flex flex-col items-center gap-4 p-6 text-center sm:p-8">
-                  <div
-                    className={`flex h-16 w-16 items-center justify-center rounded-2xl ${action.color} text-white shadow-lg transition-transform group-hover:scale-110 sm:h-20 sm:w-20`}
-                  >
-                    <action.icon className="h-8 w-8 sm:h-10 sm:w-10" />
-                  </div>
+            <Link key={action.label} href={action.href} className="group">
+              <Card className="h-full border-2 border-slate-200 transition-all duration-200 hover:-translate-y-1 hover:border-emerald-500 hover:shadow-xl">
+                <CardContent className="flex h-full flex-col justify-between p-6">
                   <div>
-                    <h3 className="text-base font-bold text-slate-900 sm:text-lg">
+                    <div
+                      className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${action.color} text-white transition-transform group-hover:scale-110`}
+                    >
+                      <action.icon className="h-7 w-7" />
+                    </div>
+                    <h3 className="mb-2 text-xl font-bold text-slate-900 transition-colors group-hover:text-emerald-700">
                       {action.label}
                     </h3>
-                    <p className="mt-1 hidden text-sm text-slate-500 sm:block">
+                    <p className="text-base leading-relaxed text-slate-600">
                       {action.description}
                     </p>
+                  </div>
+                  <div className="mt-6 flex items-center gap-1 text-base font-semibold text-emerald-700 transition-colors group-hover:text-emerald-800">
+                    Akses sekarang
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardContent>
               </Card>
@@ -260,42 +268,42 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* BERITA & PENGUMUMAN TERBARU */}
+      {/* HIGHLIGHT BERITA TERBARU (LIVE INSFORGE DB) */}
       {/* ============================================ */}
       <section className="bg-slate-50 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-                Berita & Pengumuman
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+                <Sparkles className="h-3.5 w-3.5" /> Berita Terkini
+              </div>
+              <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+                Pengumuman & Kegiatan Terbaru
               </h2>
-              <p className="mt-1 text-lg text-slate-600">
-                Informasi terbaru dari kelurahan
+              <p className="mt-1 text-base text-slate-600">
+                Informasi resmi dari pemerintah Kelurahan Bubulak
               </p>
             </div>
             <Link
               href="/berita"
-              className="hidden h-12 items-center gap-2 rounded-xl border-2 border-emerald-300 px-5 text-base font-semibold text-emerald-800 transition-colors hover:bg-emerald-50 sm:inline-flex"
+              className="hidden items-center gap-2 text-base font-bold text-emerald-700 transition-colors hover:text-emerald-800 sm:flex"
             >
-              Lihat Semua
+              Lihat Semua Berita
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {latestNews.map((news) => (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {newsItems.slice(0, 3).map((news) => (
               <Card
                 key={news.id}
-                className="group overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:-translate-y-1"
+                className="group flex flex-col overflow-hidden border-2 border-slate-200 transition-all hover:-translate-y-1 hover:border-emerald-500 hover:shadow-lg"
               >
-                {/* Placeholder Image */}
-                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-emerald-200 to-emerald-400">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Landmark className="h-16 w-16 text-emerald-600/40" />
-                  </div>
-                  <div className="absolute left-3 top-3">
+                <div className="relative h-48 w-full overflow-hidden bg-emerald-800 flex items-center justify-center text-white">
+                  <Landmark className="h-16 w-16 text-white/30" />
+                  <div className="absolute top-3 left-3">
                     <Badge
-                      className={`text-sm font-semibold ${
+                      className={`text-xs font-semibold ${
                         news.category === "Pengumuman"
                           ? "bg-amber-500 text-white hover:bg-amber-600"
                           : news.category === "Kesehatan"
@@ -307,22 +315,27 @@ export default function HomePage() {
                     </Badge>
                   </div>
                 </div>
-                <CardContent className="p-5">
-                  <div className="mb-2 flex items-center gap-2 text-sm text-slate-500">
-                    <Calendar className="h-4 w-4" />
-                    {formatDate(news.publishedAt)}
+                <CardContent className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="mb-2 flex items-center gap-2 text-sm text-slate-500">
+                      <Calendar className="h-4 w-4" />
+                      {formatDate(news.publishedAt)}
+                    </div>
+                    <h3 className="mb-2 line-clamp-2 text-lg font-bold text-slate-900 transition-colors group-hover:text-emerald-700">
+                      {news.title}
+                    </h3>
+                    <p className="line-clamp-3 text-base text-slate-600">
+                      {news.summary}
+                    </p>
                   </div>
-                  <h3 className="mb-2 line-clamp-2 text-lg font-bold text-slate-900 transition-colors group-hover:text-emerald-700">
-                    {news.title}
-                  </h3>
-                  <p className="line-clamp-3 text-base text-slate-600">
-                    {news.summary}
-                  </p>
                   <div className="mt-4">
-                    <span className="inline-flex items-center gap-1 text-base font-semibold text-emerald-700 transition-colors group-hover:text-emerald-800">
+                    <Link
+                      href={`/berita/${news.slug}`}
+                      className="inline-flex items-center gap-1 text-base font-semibold text-emerald-700 transition-colors group-hover:text-emerald-800"
+                    >
                       Baca selengkapnya
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>

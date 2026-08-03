@@ -13,6 +13,7 @@ import {
   Settings,
   LogOut,
   MessageSquareWarning,
+  Trophy,
   ExternalLink,
   Menu,
   X,
@@ -28,6 +29,7 @@ const adminNavLinks = [
   { href: "/admin/laporan", label: "Laporan Warga", icon: MessageSquareWarning },
   { href: "/admin/umkm-tempat", label: "UMKM & Tempat", icon: ShoppingBag },
   { href: "/admin/pegawai", label: "Aparatur Kelurahan", icon: Users },
+  { href: "/admin/prestasi", label: "CMS Prestasi", icon: Trophy },
   { href: "/admin/pengaturan", label: "Pengaturan Web", icon: Settings },
 ];
 

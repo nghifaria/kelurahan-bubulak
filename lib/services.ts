@@ -378,3 +378,575 @@ export async function fetchComplaintByTicket(
     );
   }
 }
+
+// ===================================================
+// INSFORGE STORAGE & ADMIN SERVICE HELPERS
+// ===================================================
+
+export async function uploadImageToInsForge(
+  file: File
+): Promise<{ url: string | null; error: any }> {
+  try {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+    const filePath = `news/${fileName}`;
+
+    const { data, error } = await insforge.storage
+      .from("kelurahan-assets")
+      .upload(filePath, file);
+
+    if (error || !data) {
+      console.error("Storage upload error:", error);
+      return { url: null, error };
+    }
+
+    return { url: data.url, error: null };
+  } catch (err) {
+    return { url: null, error: err };
+  }
+}
+
+export async function createNewsInDb(newsData: {
+  title: string;
+  category: string;
+  summary: string;
+  content: string;
+  coverImageUrl: string;
+  author?: string;
+}) {
+  try {
+    const slug =
+      newsData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, "") +
+      "-" +
+      Math.floor(100 + Math.random() * 900);
+
+    const { data, error } = await insforge.database.from("news").insert([
+      {
+        title: newsData.title,
+        slug,
+        category: newsData.category,
+        summary: newsData.summary,
+        content: newsData.content,
+        cover_image_url: newsData.coverImageUrl,
+        author: newsData.author || "Admin Kelurahan",
+        is_published: true,
+      },
+    ]);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function updateNewsInDb(
+  id: string,
+  newsData: {
+    title: string;
+    category: string;
+    summary: string;
+    content: string;
+    coverImageUrl?: string;
+  }
+) {
+  try {
+    const payload: any = {
+      title: newsData.title,
+      category: newsData.category,
+      summary: newsData.summary,
+      content: newsData.content,
+    };
+    if (newsData.coverImageUrl) {
+      payload.cover_image_url = newsData.coverImageUrl;
+    }
+
+    const { data, error } = await insforge.database
+      .from("news")
+      .update(payload)
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function deleteNewsInDb(id: string) {
+  try {
+    const { data, error } = await insforge.database
+      .from("news")
+      .delete()
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function fetchDashboardStats() {
+  try {
+    const { data: subData } = await insforge.database.from("submissions").select("status");
+    const { data: compData } = await insforge.database.from("complaints").select("status");
+    const { data: newsData } = await insforge.database.from("news").select("id");
+
+    const totalSubmissions = subData ? subData.length : 1;
+    const pendingSubmissions = subData ? subData.filter((s) => s.status === "PENDING").length : 0;
+    const totalComplaints = compData ? compData.length : 1;
+    const pendingComplaints = compData ? compData.filter((c) => c.status === "PENDING").length : 0;
+    const totalNews = newsData ? newsData.length : 3;
+
+    return {
+      totalSubmissions,
+      pendingSubmissions,
+      totalComplaints,
+      pendingComplaints,
+      totalNews,
+    };
+  } catch {
+    return {
+      totalSubmissions: 1,
+      pendingSubmissions: 0,
+      totalComplaints: 1,
+      pendingComplaints: 0,
+      totalNews: 3,
+    };
+  }
+}
+
+export interface DbSubmission {
+  id: string;
+  ticketNumber: string;
+  citizenName: string;
+  citizenNik: string;
+  citizenWhatsapp: string;
+  citizenEmail?: string;
+  serviceTitle: string;
+  notes?: string;
+  attachmentUrls?: string[];
+  status: "PENDING" | "PROCESSED" | "COMPLETED" | "REJECTED";
+  adminNotes?: string;
+  createdAt: string;
+}
+
+export async function fetchAllSubmissionsFromDb(): Promise<DbSubmission[]> {
+  try {
+    const { data, error } = await insforge.database
+      .from("submissions")
+      .select("*, service_types(title)")
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return fallbackSubmissions.map((s) => ({
+        id: s.ticketNumber,
+        ticketNumber: s.ticketNumber,
+        citizenName: s.citizenName,
+        citizenNik: s.citizenNik,
+        citizenWhatsapp: s.citizenWhatsapp,
+        serviceTitle: s.serviceTitle,
+        status: s.status,
+        adminNotes: s.adminNotes,
+        createdAt: s.createdDate,
+      }));
+    }
+
+    return data.map((item: any) => ({
+      id: item.id,
+      ticketNumber: item.ticket_number,
+      citizenName: item.citizen_name,
+      citizenNik: item.citizen_nik,
+      citizenWhatsapp: item.citizen_whatsapp,
+      citizenEmail: item.citizen_email || undefined,
+      serviceTitle: item.service_types?.title || "Surat Pengantar / Administrasi",
+      notes: item.notes || undefined,
+      attachmentUrls: Array.isArray(item.attachment_urls) ? item.attachment_urls : [],
+      status: item.status as DbSubmission["status"],
+      adminNotes: item.admin_notes || undefined,
+      createdAt: item.created_at ? item.created_at.slice(0, 10) : "",
+    }));
+  } catch {
+    return fallbackSubmissions.map((s) => ({
+      id: s.ticketNumber,
+      ticketNumber: s.ticketNumber,
+      citizenName: s.citizenName,
+      citizenNik: s.citizenNik,
+      citizenWhatsapp: s.citizenWhatsapp,
+      serviceTitle: s.serviceTitle,
+      status: s.status,
+      adminNotes: s.adminNotes,
+      createdAt: s.createdDate,
+    }));
+  }
+}
+
+export async function updateSubmissionStatusInDb(
+  id: string,
+  status: "PENDING" | "PROCESSED" | "COMPLETED" | "REJECTED",
+  adminNotes: string
+) {
+  try {
+    const { data, error } = await insforge.database
+      .from("submissions")
+      .update({
+        status,
+        admin_notes: adminNotes || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export interface DbComplaint {
+  id: string;
+  ticketNumber: string;
+  title: string;
+  rtRwLocation: string;
+  description: string;
+  photoUrl?: string;
+  reporterName: string;
+  reporterWhatsapp?: string;
+  status: "PENDING" | "IN_PROGRESS" | "RESOLVED";
+  isPublic: boolean;
+  createdAt: string;
+}
+
+export async function fetchAllComplaintsFromDb(): Promise<DbComplaint[]> {
+  try {
+    const { data, error } = await insforge.database
+      .from("complaints")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return fallbackComplaints.map((c) => ({
+        id: c.ticketNumber,
+        ticketNumber: c.ticketNumber,
+        title: c.title,
+        rtRwLocation: c.rtRwLocation,
+        description: c.description,
+        reporterName: c.reporterName,
+        reporterWhatsapp: c.reporterWhatsapp,
+        status: c.status,
+        isPublic: true,
+        createdAt: c.createdDate,
+      }));
+    }
+
+    return data.map((item: any) => ({
+      id: item.id,
+      ticketNumber: item.ticket_number,
+      title: item.title,
+      rtRwLocation: item.rt_rw_location,
+      description: item.description,
+      photoUrl: item.photo_url || undefined,
+      reporterName: item.reporter_name || "Anonim",
+      reporterWhatsapp: item.reporter_whatsapp || undefined,
+      status: item.status as DbComplaint["status"],
+      isPublic: item.is_public ?? false,
+      createdAt: item.created_at ? item.created_at.slice(0, 10) : "",
+    }));
+  } catch {
+    return fallbackComplaints.map((c) => ({
+      id: c.ticketNumber,
+      ticketNumber: c.ticketNumber,
+      title: c.title,
+      rtRwLocation: c.rtRwLocation,
+      description: c.description,
+      reporterName: c.reporterName,
+      reporterWhatsapp: c.reporterWhatsapp,
+      status: c.status,
+      isPublic: true,
+      createdAt: c.createdDate,
+    }));
+  }
+}
+
+export async function updateComplaintStatusInDb(
+  id: string,
+  status: "PENDING" | "IN_PROGRESS" | "RESOLVED",
+  isPublic: boolean
+) {
+  try {
+    const { data, error } = await insforge.database
+      .from("complaints")
+      .update({
+        status,
+        is_public: isPublic,
+      })
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+// ===================================================
+// UMKM & PUBLIC PLACES SERVICES
+// ===================================================
+
+export async function createUmkmInDb(umkmData: {
+  businessName: string;
+  category: string;
+  ownerName: string;
+  description: string;
+  photoUrl: string;
+  whatsappContact: string;
+  address: string;
+  googleMapsUrl?: string;
+  isVerified: boolean;
+}) {
+  try {
+    const { data, error } = await insforge.database.from("umkm").insert([
+      {
+        business_name: umkmData.businessName,
+        category: umkmData.category,
+        owner_name: umkmData.ownerName,
+        description: umkmData.description,
+        photo_url: umkmData.photoUrl,
+        whatsapp_contact: umkmData.whatsappContact,
+        address: umkmData.address,
+        google_maps_url: umkmData.googleMapsUrl || null,
+        is_verified: umkmData.isVerified,
+      },
+    ]);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function updateUmkmInDb(
+  id: string,
+  umkmData: {
+    businessName: string;
+    category: string;
+    ownerName: string;
+    description: string;
+    photoUrl?: string;
+    whatsappContact: string;
+    address: string;
+    googleMapsUrl?: string;
+    isVerified: boolean;
+  }
+) {
+  try {
+    const payload: any = {
+      business_name: umkmData.businessName,
+      category: umkmData.category,
+      owner_name: umkmData.ownerName,
+      description: umkmData.description,
+      whatsapp_contact: umkmData.whatsappContact,
+      address: umkmData.address,
+      google_maps_url: umkmData.googleMapsUrl || null,
+      is_verified: umkmData.isVerified,
+    };
+    if (umkmData.photoUrl) {
+      payload.photo_url = umkmData.photoUrl;
+    }
+
+    const { data, error } = await insforge.database
+      .from("umkm")
+      .update(payload)
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function deleteUmkmInDb(id: string) {
+  try {
+    const { data, error } = await insforge.database
+      .from("umkm")
+      .delete()
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function createPublicPlaceInDb(placeData: {
+  name: string;
+  category: string;
+  address: string;
+  googleMapsUrl: string;
+  description?: string;
+}) {
+  try {
+    const { data, error } = await insforge.database.from("public_places").insert([
+      {
+        name: placeData.name,
+        category: placeData.category,
+        address: placeData.address,
+        google_maps_url: placeData.googleMapsUrl,
+        description: placeData.description || null,
+      },
+    ]);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function updatePublicPlaceInDb(
+  id: string,
+  placeData: {
+    name: string;
+    category: string;
+    address: string;
+    googleMapsUrl: string;
+    description?: string;
+  }
+) {
+  try {
+    const { data, error } = await insforge.database
+      .from("public_places")
+      .update({
+        name: placeData.name,
+        category: placeData.category,
+        address: placeData.address,
+        google_maps_url: placeData.googleMapsUrl,
+        description: placeData.description || null,
+      })
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function deletePublicPlaceInDb(id: string) {
+  try {
+    const { data, error } = await insforge.database
+      .from("public_places")
+      .delete()
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+// ===================================================
+// STAFF MEMBERS SERVICES
+// ===================================================
+
+export async function createStaffMemberInDb(staffData: {
+  name: string;
+  position: string;
+  photoUrl: string;
+  displayOrder: number;
+}) {
+  try {
+    const { data, error } = await insforge.database.from("staff_members").insert([
+      {
+        name: staffData.name,
+        position: staffData.position,
+        photo_url: staffData.photoUrl,
+        display_order: staffData.displayOrder,
+      },
+    ]);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function updateStaffMemberInDb(
+  id: string,
+  staffData: {
+    name: string;
+    position: string;
+    photoUrl?: string;
+    displayOrder: number;
+  }
+) {
+  try {
+    const payload: any = {
+      name: staffData.name,
+      position: staffData.position,
+      display_order: staffData.displayOrder,
+    };
+    if (staffData.photoUrl) {
+      payload.photo_url = staffData.photoUrl;
+    }
+
+    const { data, error } = await insforge.database
+      .from("staff_members")
+      .update(payload)
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+export async function deleteStaffMemberInDb(id: string) {
+  try {
+    const { data, error } = await insforge.database
+      .from("staff_members")
+      .delete()
+      .eq("id", id);
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+// ===================================================
+// SITE SETTINGS SERVICES
+// ===================================================
+
+export async function updateSiteSettingsInDb(settingsData: {
+  villageName?: string;
+  lurahName: string;
+  officeAddress: string;
+  contactEmail: string;
+  contactWhatsapp: string;
+  googleMapsUrl: string;
+  instagramUrl?: string;
+  tiktokUrl?: string;
+}) {
+  try {
+    // Check if site_settings row exists
+    const { data: existing } = await insforge.database
+      .from("site_settings")
+      .select("id")
+      .limit(1)
+      .maybeSingle();
+
+    const payload = {
+      village_name: settingsData.villageName || "Kelurahan Bubulak",
+      lurah_name: settingsData.lurahName,
+      office_address: settingsData.officeAddress,
+      contact_email: settingsData.contactEmail,
+      contact_whatsapp: settingsData.contactWhatsapp,
+      google_maps_url: settingsData.googleMapsUrl,
+      instagram_url: settingsData.instagramUrl || null,
+      tiktok_url: settingsData.tiktokUrl || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (existing) {
+      const { data, error } = await insforge.database
+        .from("site_settings")
+        .update(payload)
+        .eq("id", existing.id);
+      return { data, error };
+    } else {
+      const { data, error } = await insforge.database
+        .from("site_settings")
+        .insert([payload]);
+      return { data, error };
+    }
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+
+

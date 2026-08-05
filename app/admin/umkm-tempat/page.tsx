@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   fetchUmkm,
+  fetchAllUmkmFromDb,
   fetchPublicPlaces,
   createUmkmInDb,
   updateUmkmInDb,
@@ -75,7 +76,7 @@ export default function AdminUmkmTempatPage() {
 
   async function loadAllData() {
     setIsLoading(true);
-    const uData = await fetchUmkm();
+    const uData = await fetchAllUmkmFromDb();
     const pData = await fetchPublicPlaces();
     setUmkmList(uData);
     setPlacesList(pData);
@@ -331,6 +332,7 @@ export default function AdminUmkmTempatPage() {
               <table className="w-full text-left text-base text-slate-800">
                 <thead className="bg-slate-900 text-xs font-bold uppercase tracking-wider text-slate-300">
                   <tr>
+                    <th className="px-6 py-4">Foto</th>
                     <th className="px-6 py-4">Nama Usaha</th>
                     <th className="px-6 py-4">Pemilik & Kontak WA</th>
                     <th className="px-6 py-4">Kategori</th>
@@ -341,13 +343,29 @@ export default function AdminUmkmTempatPage() {
                 <tbody className="divide-y divide-slate-200 bg-white">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+                      <td colSpan={6} className="px-6 py-8 text-center text-slate-500">
                         Memuat data UMKM dari INSForge...
                       </td>
                     </tr>
                   ) : (
                     umkmList.map((item) => (
                       <tr key={item.id} className="hover:bg-slate-50">
+                        <td className="px-6 py-4">
+                          <div className="h-12 w-16 overflow-hidden rounded-lg bg-amber-800 flex items-center justify-center text-white border border-slate-200 relative">
+                            {item.photoUrl && (item.photoUrl.startsWith("http") || item.photoUrl.startsWith("/")) ? (
+                              <img
+                                src={item.photoUrl}
+                                alt={item.businessName}
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLElement).style.display = "none";
+                                }}
+                              />
+                            ) : (
+                              <Store className="h-5 w-5 text-white/40" />
+                            )}
+                          </div>
+                        </td>
                         <td className="px-6 py-4 font-bold text-slate-900">
                           {item.businessName}
                           <p className="text-xs text-slate-400 font-normal">{item.address}</p>
@@ -591,7 +609,24 @@ export default function AdminUmkmTempatPage() {
                   onChange={handleFileUpload}
                   className="text-sm text-slate-600"
                 />
-                {isUploading && <p className="text-xs font-bold text-amber-700 mt-1">Mengunggah foto...</p>}
+                {isUploading && <p className="text-xs font-bold text-amber-700 mt-1">Mengunggah foto ke INSForge Storage...</p>}
+
+                {photoUrl && (
+                  <div className="mt-3 flex items-center gap-4 rounded-xl bg-white p-3 border border-amber-200">
+                    <img
+                      src={photoUrl}
+                      alt="Preview Foto UMKM"
+                      className="h-20 w-28 rounded-lg object-cover border border-slate-200"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = "none";
+                      }}
+                    />
+                    <div className="text-xs font-mono text-slate-600 truncate flex-1">
+                      <p className="font-bold text-slate-800 font-sans text-sm mb-0.5">Pratinjau Foto Usaha</p>
+                      <p className="truncate text-amber-900">{photoUrl}</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Verified Toggle */}

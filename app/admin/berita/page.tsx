@@ -28,6 +28,7 @@ import {
   uploadImageToInsForge,
 } from "@/lib/services";
 import { NewsItem } from "@/lib/data";
+import { RichTextRenderer } from "@/components/RichTextRenderer";
 
 export default function AdminBeritaPage() {
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
@@ -251,8 +252,19 @@ export default function AdminBeritaPage() {
                 filteredNews.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="h-14 w-20 overflow-hidden rounded-lg bg-emerald-800 flex items-center justify-center text-white">
-                        <Landmark className="h-6 w-6 text-white/40" />
+                      <div className="h-14 w-20 overflow-hidden rounded-lg bg-emerald-800 flex items-center justify-center text-white border border-slate-200 relative">
+                        {item.coverImageUrl && (item.coverImageUrl.startsWith("http") || item.coverImageUrl.startsWith("/")) ? (
+                          <img
+                            src={item.coverImageUrl}
+                            alt={item.title}
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <Landmark className="h-6 w-6 text-white/40" />
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 font-bold text-slate-900">
@@ -390,17 +402,82 @@ export default function AdminBeritaPage() {
 
               {/* Content */}
               <div>
-                <label className="mb-2 block text-base font-bold text-slate-800">
-                  Isi Lengkap Berita / Artikel <span className="text-red-500">*</span>
-                </label>
+                <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                  <label className="text-base font-bold text-slate-800">
+                    Isi Lengkap Berita / Artikel <span className="text-red-500">*</span>
+                  </label>
+                  <span className="text-xs font-semibold text-slate-500">
+                    Format otomatis: AI / Markdown disupport (# Header, **Tebal**, - Poin)
+                  </span>
+                </div>
+
+                {/* Formatting Toolbar Shortcuts */}
+                <div className="mb-2 flex flex-wrap items-center gap-1.5 rounded-xl bg-slate-100 p-2 border border-slate-200">
+                  <span className="text-xs font-bold text-slate-600 mr-1 px-1">Pintas Format:</span>
+                  <button
+                    type="button"
+                    onClick={() => setContent((prev) => prev ? `${prev}\n# Header Utama` : "# Header Utama")}
+                    className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    # Header 1
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContent((prev) => prev ? `${prev}\n## Sub Header` : "## Sub Header")}
+                    className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    ## Header 2
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContent((prev) => prev ? `${prev} **Teks Tebal** ` : "**Teks Tebal**")}
+                    className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    **Tebal**
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContent((prev) => prev ? `${prev}\n- Poin informasi 1\n- Poin informasi 2` : "- Poin informasi 1\n- Poin informasi 2")}
+                    className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    - Poin Bullet
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContent((prev) => prev ? `${prev}\n1. Langkah 1\n2. Langkah 2` : "1. Langkah 1\n2. Langkah 2")}
+                    className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    1. Poin Angka
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContent((prev) => prev ? `${prev}\n> Kutipan atau imbauan penting` : "> Kutipan atau imbauan penting")}
+                    className="rounded-lg bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    &gt; Kutipan
+                  </button>
+                </div>
+
                 <textarea
-                  rows={6}
-                  placeholder="Tuliskan isi berita secara lengkap di sini..."
+                  rows={7}
+                  placeholder="Tulis atau tempel (paste) hasil teks AI / artikel di sini... (otomatis rapi)"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full rounded-xl border-2 border-slate-200 p-4 text-base leading-relaxed"
+                  className="w-full rounded-xl border-2 border-slate-200 p-4 text-base leading-relaxed font-sans"
                   required
                 />
+
+                {/* LIVE FORMAT PREVIEW */}
+                {content && (
+                  <div className="mt-3 rounded-xl border-2 border-emerald-200 bg-emerald-50/40 p-4">
+                    <p className="text-xs font-extrabold uppercase text-emerald-800 tracking-wider mb-2 flex items-center gap-1.5">
+                      Pratinjau Tampilan Berita Publik (Live Preview):
+                    </p>
+                    <div className="bg-white p-5 rounded-lg border border-slate-200 text-slate-900 shadow-inner max-h-60 overflow-y-auto">
+                      <RichTextRenderer content={content} />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* COMPONENT UPLOAD GAMBAR SAMPUL */}
@@ -430,9 +507,17 @@ export default function AdminBeritaPage() {
                   </div>
 
                   {coverImageUrl && (
-                    <div className="mt-4 rounded-xl bg-white p-3 border border-emerald-200 text-xs font-mono text-emerald-900 max-w-md truncate">
-                      <p className="font-bold text-slate-700 text-left mb-0.5">Public Storage URL:</p>
-                      <p className="truncate">{coverImageUrl}</p>
+                    <div className="mt-4 flex flex-col items-center rounded-xl bg-white p-3 border border-emerald-200 text-xs font-mono text-emerald-900 max-w-md">
+                      <img
+                        src={coverImageUrl}
+                        alt="Preview Sampul"
+                        className="h-28 w-44 rounded-lg object-cover border border-slate-200 mb-2"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                      />
+                      <p className="font-bold text-slate-700 text-left mb-0.5 w-full">Public Storage URL:</p>
+                      <p className="truncate w-full">{coverImageUrl}</p>
                     </div>
                   )}
                 </div>

@@ -56,9 +56,16 @@ export default async function BeritaListingPage() {
                 key={news.id}
                 className="group flex flex-col overflow-hidden border-2 border-slate-200 transition-all duration-200 hover:-translate-y-1 hover:border-emerald-500 hover:shadow-xl"
               >
-                <div className="relative h-52 w-full overflow-hidden bg-emerald-800 flex items-center justify-center text-white">
-                  <Landmark className="h-20 w-20 text-white/30" />
-                  <div className="absolute top-3 left-3">
+                <div className="relative h-52 w-full overflow-hidden bg-slate-900 flex items-center justify-center text-white">
+                  {news.coverImageUrl && (news.coverImageUrl.startsWith("http") || news.coverImageUrl.startsWith("/")) ? (
+                    <img
+                      src={news.coverImageUrl}
+                      alt={news.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : null}
+                  <Landmark className="absolute h-16 w-16 text-white/30 -z-10" />
+                  <div className="absolute top-3 left-3 z-10">
                     <Badge
                       className={`text-xs font-semibold ${
                         news.category === "Pengumuman"

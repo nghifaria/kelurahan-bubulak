@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { fetchNewsBySlug, fetchNews } from "@/lib/services";
+import { RichTextRenderer } from "@/components/RichTextRenderer";
 
 function formatDate(dateString: string): string {
   if (!dateString) return "";
@@ -93,16 +94,25 @@ export default async function BeritaDetailPage({ params }: PageProps) {
 
       {/* MAIN ARTICLE CONTENT */}
       <section className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-8 overflow-hidden rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-800 via-emerald-700 to-emerald-900 p-12 text-center shadow-lg">
-          <Landmark className="mx-auto mb-4 h-24 w-24 text-emerald-300/40" />
-          <p className="text-xl font-bold text-white">{news.title}</p>
-          <p className="mt-1 text-sm text-emerald-200">Foto Utama Artikel</p>
+        <div className="mb-8 overflow-hidden rounded-2xl border-2 border-emerald-200 bg-slate-900 shadow-lg relative min-h-[250px] flex items-center justify-center text-center">
+          {news.coverImageUrl && (news.coverImageUrl.startsWith("http") || news.coverImageUrl.startsWith("/")) ? (
+            <img
+              src={news.coverImageUrl}
+              alt={news.title}
+              className="w-full max-h-[500px] object-cover"
+            />
+          ) : (
+            <div className="p-12 text-center">
+              <Landmark className="mx-auto mb-4 h-24 w-24 text-emerald-300/40" />
+              <p className="text-xl font-bold text-white">{news.title}</p>
+            </div>
+          )}
         </div>
 
         {/* Article Body */}
-        <article className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-800 prose-p:text-lg prose-p:leading-relaxed">
-          <div className="rounded-2xl bg-white p-6 sm:p-10 border-2 border-slate-200 shadow-sm leading-relaxed whitespace-pre-line text-lg text-slate-800">
-            {news.content}
+        <article className="prose prose-slate max-w-none">
+          <div className="rounded-2xl bg-white p-6 sm:p-10 border-2 border-slate-200 shadow-sm text-lg text-slate-800">
+            <RichTextRenderer content={news.content} />
           </div>
         </article>
 

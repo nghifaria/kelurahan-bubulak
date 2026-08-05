@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { operationalHours, quickActions } from "@/lib/data";
 import { fetchNews, fetchSiteSettings } from "@/lib/services";
+import { OperationalHoursWidget } from "@/components/OperationalHoursWidget";
 
 function getIsOpen(): {
   isOpen: boolean;
@@ -156,71 +157,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ============================================ */}
       {/* JAM OPERASIONAL WIDGET */}
       {/* ============================================ */}
       <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <Card className="overflow-hidden border-2 border-emerald-200/60 shadow-lg">
           <CardContent className="p-0">
-            <div className="flex flex-col lg:flex-row">
-              {/* Status Box */}
-              <div
-                className={`flex flex-col items-center justify-center gap-3 px-8 py-8 text-center lg:min-w-[280px] ${
-                  isOpen
-                    ? "bg-gradient-to-br from-emerald-600 to-emerald-700"
-                    : "bg-gradient-to-br from-red-500 to-red-600"
-                }`}
-              >
-                {isOpen ? (
-                  <CheckCircle className="h-12 w-12 text-white" />
-                ) : (
-                  <XCircle className="h-12 w-12 text-white" />
-                )}
-                <div>
-                  <p className="text-2xl font-extrabold text-white">
-                    {isOpen ? "BUKA" : "TUTUP"}
-                  </p>
-                  <p className="text-base text-white/80">
-                    {currentDay},{" "}
-                    {todayHours?.open
-                      ? `${todayHours.open} - ${todayHours.close}`
-                      : "Libur"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Schedule Table */}
-              <div className="flex-1 p-6 lg:p-8">
-                <div className="mb-4 flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-emerald-700" />
-                  <h2 className="text-xl font-bold text-slate-900">
-                    Jadwal Pelayanan Kantor
-                  </h2>
-                </div>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-                  {operationalHours
-                    .filter((h) => h.open)
-                    .map((h) => (
-                      <div
-                        key={h.day}
-                        className={`flex items-center justify-between rounded-xl px-4 py-3 text-base transition-colors ${
-                          h.day === currentDay
-                            ? "bg-emerald-100 font-bold text-emerald-900 ring-2 ring-emerald-500"
-                            : "bg-slate-50 text-slate-700"
-                        }`}
-                      >
-                        <span className="font-medium">{h.day}</span>
-                        <span className="font-semibold">
-                          {h.open} - {h.close}
-                        </span>
-                      </div>
-                    ))}
-                </div>
-                <p className="mt-3 text-sm text-slate-500">
-                  * Sabtu, Minggu & Hari Libur Nasional: Kantor Tutup
-                </p>
-              </div>
-            </div>
+            <OperationalHoursWidget />
           </CardContent>
         </Card>
       </section>
@@ -299,9 +241,16 @@ export default async function HomePage() {
                 key={news.id}
                 className="group flex flex-col overflow-hidden border-2 border-slate-200 transition-all hover:-translate-y-1 hover:border-emerald-500 hover:shadow-lg"
               >
-                <div className="relative h-48 w-full overflow-hidden bg-emerald-800 flex items-center justify-center text-white">
-                  <Landmark className="h-16 w-16 text-white/30" />
-                  <div className="absolute top-3 left-3">
+                <div className="relative h-48 w-full overflow-hidden bg-slate-900 flex items-center justify-center text-white">
+                  {news.coverImageUrl && (news.coverImageUrl.startsWith("http") || news.coverImageUrl.startsWith("/")) ? (
+                    <img
+                      src={news.coverImageUrl}
+                      alt={news.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : null}
+                  <Landmark className="absolute h-16 w-16 text-white/30 -z-10" />
+                  <div className="absolute top-3 left-3 z-10">
                     <Badge
                       className={`text-xs font-semibold ${
                         news.category === "Pengumuman"

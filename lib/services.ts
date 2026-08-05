@@ -400,7 +400,15 @@ export async function uploadImageToInsForge(
       return { url: null, error };
     }
 
-    return { url: data.url, error: null };
+    let publicUrl = data.url;
+    if (publicUrl && !publicUrl.startsWith("http")) {
+      const baseUrl =
+        process.env.NEXT_PUBLIC_INSFORGE_URL ||
+        "https://f2cgcd9x.ap-southeast.insforge.app";
+      publicUrl = `${baseUrl.replace(/\/$/, "")}${publicUrl.startsWith("/") ? "" : "/"}${publicUrl}`;
+    }
+
+    return { url: publicUrl, error: null };
   } catch (err) {
     return { url: null, error: err };
   }
@@ -687,6 +695,32 @@ export async function updateComplaintStatusInDb(
 // ===================================================
 // UMKM & PUBLIC PLACES SERVICES
 // ===================================================
+
+export async function fetchAllUmkmFromDb(): Promise<UmkmItem[]> {
+  try {
+    const { data, error } = await insforge.database
+      .from("umkm")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) return fallbackUmkm;
+
+    return data.map((item: any) => ({
+      id: item.id,
+      businessName: item.business_name,
+      category: item.category as UmkmItem["category"],
+      ownerName: item.owner_name || "",
+      description: item.description || "",
+      photoUrl: item.photo_url || "/placeholder-umkm-1.jpg",
+      whatsappContact: item.whatsapp_contact,
+      address: item.address || "",
+      googleMapsUrl: item.google_maps_url || undefined,
+      isVerified: item.is_verified ?? true,
+    }));
+  } catch {
+    return fallbackUmkm;
+  }
+}
 
 export async function createUmkmInDb(umkmData: {
   businessName: string;

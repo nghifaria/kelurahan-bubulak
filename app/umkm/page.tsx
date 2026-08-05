@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -26,10 +26,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { umkmList, publicPlacesList, UmkmItem, PublicPlaceItem } from "@/lib/data";
+import { UmkmItem, PublicPlaceItem } from "@/lib/data";
+import { fetchUmkm, fetchPublicPlaces } from "@/lib/services";
 
 export default function UmkmPage() {
   const [activeTab, setActiveTab] = useState<"umkm" | "fasilitas">("umkm");
+
+  // Live Data States
+  const [umkmList, setUmkmList] = useState<UmkmItem[]>([]);
+  const [publicPlacesList, setPublicPlacesList] = useState<PublicPlaceItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // UMKM State
   const [searchUmkm, setSearchUmkm] = useState("");
@@ -38,6 +44,20 @@ export default function UmkmPage() {
   // Public Places State
   const [searchPlace, setSearchPlace] = useState("");
   const [selectedPlaceCat, setSelectedPlaceCat] = useState<string>("Semua");
+
+  useEffect(() => {
+    async function loadLiveData() {
+      setIsLoading(true);
+      const [uData, pData] = await Promise.all([
+        fetchUmkm(),
+        fetchPublicPlaces(),
+      ]);
+      setUmkmList(uData);
+      setPublicPlacesList(pData);
+      setIsLoading(false);
+    }
+    loadLiveData();
+  }, []);
 
   const umkmCategories = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Toko"];
   const placeCategories = [
@@ -59,7 +79,7 @@ export default function UmkmPage() {
         item.description.toLowerCase().includes(searchUmkm.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [searchUmkm, selectedUmkmCat]);
+  }, [umkmList, searchUmkm, selectedUmkmCat]);
 
   const filteredPlaces = useMemo(() => {
     return publicPlacesList.filter((place) => {
@@ -70,7 +90,7 @@ export default function UmkmPage() {
         place.address.toLowerCase().includes(searchPlace.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [searchPlace, selectedPlaceCat]);
+  }, [publicPlacesList, searchPlace, selectedPlaceCat]);
 
   const getUmkmCategoryIcon = (category: string) => {
     switch (category) {
@@ -253,12 +273,17 @@ export default function UmkmPage() {
                       key={item.id}
                       className="group flex flex-col overflow-hidden border-2 border-slate-200 transition-all duration-300 hover:border-amber-300 hover:shadow-xl hover:-translate-y-1"
                     >
-                      {/* Photo Placeholder */}
-                      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-amber-600 via-amber-500 to-amber-700 text-white">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <IconComp className="h-20 w-20 text-white/30" />
-                        </div>
-                        <div className="absolute left-3 top-3 flex gap-2">
+                      {/* Photo Header */}
+                      <div className="relative h-48 overflow-hidden bg-slate-900 text-white flex items-center justify-center">
+                        {item.photoUrl && (item.photoUrl.startsWith("http") || item.photoUrl.startsWith("/")) ? (
+                          <img
+                            src={item.photoUrl}
+                            alt={item.businessName}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        ) : null}
+                        <IconComp className="absolute h-16 w-16 text-white/30 -z-10" />
+                        <div className="absolute left-3 top-3 flex gap-2 z-10">
                           <Badge className="bg-amber-800 text-white font-bold text-xs">
                             {item.category}
                           </Badge>

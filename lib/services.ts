@@ -62,6 +62,23 @@ export async function fetchSiteSettings() {
       contactWhatsapp: data.contact_whatsapp || fallbackSiteSettings.contactWhatsapp,
       googleMapsUrl: data.google_maps_url || fallbackSiteSettings.googleMapsUrl,
       instagramUrl: data.instagram_url || fallbackSiteSettings.instagramUrl,
+      overviewText: data.overview_text || fallbackSiteSettings.overviewText,
+      boundaries: {
+        north: data.boundary_north || fallbackSiteSettings.boundaries.north,
+        south: data.boundary_south || fallbackSiteSettings.boundaries.south,
+        west: data.boundary_west || fallbackSiteSettings.boundaries.west,
+        east: data.boundary_east || fallbackSiteSettings.boundaries.east,
+      },
+      demographics: {
+        totalPopulation: data.total_population ?? fallbackSiteSettings.demographics.totalPopulation,
+        totalKK: data.total_kk ?? fallbackSiteSettings.demographics.totalKK,
+        malePopulation: data.male_population ?? fallbackSiteSettings.demographics.malePopulation,
+        femalePopulation: data.female_population ?? fallbackSiteSettings.demographics.femalePopulation,
+        rtCount: data.rt_count ?? fallbackSiteSettings.demographics.rtCount,
+        rwCount: data.rw_count ?? fallbackSiteSettings.demographics.rwCount,
+        areaSize: data.area_size || fallbackSiteSettings.demographics.areaSize,
+        altitude: data.altitude || fallbackSiteSettings.demographics.altitude,
+      },
     };
   } catch {
     return fallbackSiteSettings;
@@ -945,6 +962,19 @@ export async function updateSiteSettingsInDb(settingsData: {
   googleMapsUrl: string;
   instagramUrl?: string;
   tiktokUrl?: string;
+  overviewText?: string;
+  boundaryNorth?: string;
+  boundarySouth?: string;
+  boundaryWest?: string;
+  boundaryEast?: string;
+  totalPopulation?: number;
+  totalKK?: number;
+  malePopulation?: number;
+  femalePopulation?: number;
+  rtCount?: number;
+  rwCount?: number;
+  areaSize?: string;
+  altitude?: string;
 }) {
   try {
     // Check if site_settings row exists
@@ -954,7 +984,7 @@ export async function updateSiteSettingsInDb(settingsData: {
       .limit(1)
       .maybeSingle();
 
-    const payload = {
+    const payload: any = {
       village_name: settingsData.villageName || "Kelurahan Bubulak",
       lurah_name: settingsData.lurahName,
       office_address: settingsData.officeAddress,
@@ -963,6 +993,19 @@ export async function updateSiteSettingsInDb(settingsData: {
       google_maps_url: settingsData.googleMapsUrl,
       instagram_url: settingsData.instagramUrl || null,
       tiktok_url: settingsData.tiktokUrl || null,
+      overview_text: settingsData.overviewText || null,
+      boundary_north: settingsData.boundaryNorth || null,
+      boundary_south: settingsData.boundarySouth || null,
+      boundary_west: settingsData.boundaryWest || null,
+      boundary_east: settingsData.boundaryEast || null,
+      total_population: settingsData.totalPopulation || null,
+      total_kk: settingsData.totalKK || null,
+      male_population: settingsData.malePopulation || null,
+      female_population: settingsData.femalePopulation || null,
+      rt_count: settingsData.rtCount || null,
+      rw_count: settingsData.rwCount || null,
+      area_size: settingsData.areaSize || null,
+      altitude: settingsData.altitude || null,
       updated_at: new Date().toISOString(),
     };
 

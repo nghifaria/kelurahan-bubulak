@@ -350,13 +350,31 @@ export const quickActions = [
 
 export const siteSettings = {
   villageName: "Kelurahan Bubulak",
-  lurahName: "H. Ahmad Supriyadi, S.Sos., M.Si.",
+  lurahName: "ANJAR APRIYANA, S.Sos., M.Si",
   officeAddress:
     "Jl. Raya Bubulak No. 1, Kel. Bubulak, Kec. Bogor Barat, Kota Bogor, Jawa Barat 16115",
   contactEmail: "kelurahan.bubulak@kotabogor.go.id",
   contactWhatsapp: "6281234567890",
   googleMapsUrl: "https://maps.app.goo.gl/example",
   instagramUrl: "https://instagram.com/kel.bubulak",
+  overviewText:
+    "Merupakan salah satu Kelurahan dari 16 Kelurahan yang ada di wilayah Kecamatan Bogor Barat dan merupakan wilayah dataran 368 meter diatas permukaan laut, dengan luas Kurang Lebih 157,085 Ha. dengan jumlah Ketua RT Sebanyak 50 dan Ketua RW Sebanyak 13.",
+  boundaries: {
+    north: "Kelurahan Semplak",
+    south: "Kelurahan Margajaya dan Balumbangjaya",
+    west: "Kelurahan Situgede",
+    east: "Kelurahan Sindang Barang",
+  },
+  demographics: {
+    totalPopulation: 18724,
+    totalKK: 5732,
+    malePopulation: 9519,
+    femalePopulation: 9205,
+    rtCount: 50,
+    rwCount: 13,
+    areaSize: "157,085 Ha",
+    altitude: "368 mdpl",
+  },
 };
 
 export interface UmkmItem {
@@ -512,45 +530,66 @@ export interface StaffMember {
 export const staffMembersList: StaffMember[] = [
   {
     id: "1",
-    name: "H. Ahmad Supriyadi, S.Sos., M.Si.",
-    position: "Lurah Bubulak",
+    name: "ANJAR APRIYANA, S.Sos., M.Si",
+    position: "LURAH BUBULAK",
     photoUrl: "/placeholder-staff-1.jpg",
     displayOrder: 1,
   },
   {
     id: "2",
-    name: "Dra. Hj. Siti Rahmah",
-    position: "Sekretaris Kelurahan",
+    name: "IRNA SITI NURJANAH, S.Sos., MA",
+    position: "PLT SEKRETARIS LURAH",
     photoUrl: "/placeholder-staff-2.jpg",
     displayOrder: 2,
   },
   {
     id: "3",
-    name: "Bambang Hermawan, S.IP.",
-    position: "Kasi Pemerintahan & Ketertiban",
+    name: "ARIA DINATA, S.Sos., M.Si",
+    position: "KASI PEMERINTAHAN DAN KETERTIBAN",
     photoUrl: "/placeholder-staff-3.jpg",
     displayOrder: 3,
   },
   {
     id: "4",
-    name: "Sri Mulyani, S.E.",
-    position: "Kasi Kesejahteraan Masyarakat",
+    name: "SAEFUL BAHRI, SE",
+    position: "KASI KEMASYARAKATAN",
     photoUrl: "/placeholder-staff-4.jpg",
     displayOrder: 4,
   },
   {
     id: "5",
-    name: "Ahmad Fauzi, A.Md.",
-    position: "Kasi Pembangunan & Lingkungan",
+    name: "IRNA SITI NURJANAH, S.Sos., MA",
+    position: "KASI EKONOMI DAN PEMBANGUNAN",
     photoUrl: "/placeholder-staff-5.jpg",
     displayOrder: 5,
   },
   {
     id: "6",
-    name: "Rina Kusumatuti",
-    position: "Staf Pelayanan Kependudukan",
+    name: "ENDANG M.",
+    position: "STAFF ADMINISTRASI",
     photoUrl: "/placeholder-staff-6.jpg",
     displayOrder: 6,
+  },
+  {
+    id: "7",
+    name: "FERRY PRATAMA",
+    position: "STAFF KEMASYARAKATAN",
+    photoUrl: "/placeholder-staff-7.jpg",
+    displayOrder: 7,
+  },
+  {
+    id: "8",
+    name: "UJANG ATMA",
+    position: "STAFF PEMERINTAHAN DAN KETERTIBAN",
+    photoUrl: "/placeholder-staff-8.jpg",
+    displayOrder: 8,
+  },
+  {
+    id: "9",
+    name: "ALFIAN AJUDIN",
+    position: "STAFF EKONOMI DAN PEMBANGUNAN",
+    photoUrl: "/placeholder-staff-9.jpg",
+    displayOrder: 9,
   },
 ];
 

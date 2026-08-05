@@ -11,21 +11,27 @@ import {
   Award,
   MapPin,
   Building,
-  UserCheck,
   CheckCircle2,
-  Briefcase,
+  Compass,
+  Home,
+  User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  siteSettings,
-  staffMembersList,
-  achievementsList,
-  villageStats,
-} from "@/lib/data";
+  fetchSiteSettings,
+  fetchStaffMembers,
+  fetchAchievements,
+} from "@/lib/services";
 
-export default function ProfilPage() {
-  const sortedStaff = [...staffMembersList].sort(
+export default async function ProfilPage() {
+  const [siteSettings, staffList, achievementsList] = await Promise.all([
+    fetchSiteSettings(),
+    fetchStaffMembers(),
+    fetchAchievements(),
+  ]);
+
+  const sortedStaff = [...staffList].sort(
     (a, b) => a.displayOrder - b.displayOrder
   );
 
@@ -57,11 +63,11 @@ export default function ProfilPage() {
 
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-100 backdrop-blur-sm">
             <Sparkles className="h-4 w-4" />
-            Mengenal Lebih Dekat
+            Profil Resmi Kelurahan
           </div>
 
           <h1 className="mb-4 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            Profil Kelurahan Bubulak
+            Profil {siteSettings.villageName}
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-emerald-100/90">
             Kecamatan Bogor Barat, Kota Bogor · Jawa Barat
@@ -85,61 +91,72 @@ export default function ProfilPage() {
       </section>
 
       {/* ============================================ */}
-      {/* STATISTIK WILAYAH */}
+      {/* STATISTIK WILAYAH & PENDUDUK */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-5xl px-4 -mt-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5">
-          <Card className="border-2 border-emerald-200/80 bg-white text-center shadow-lg">
-            <CardContent className="p-4 sm:p-6">
-              <p className="text-3xl font-extrabold text-emerald-700 sm:text-4xl">
-                {villageStats.areaKm2}
+      <section className="mx-auto w-full max-w-6xl px-4 -mt-6 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <Card className="border-2 border-emerald-200 bg-white text-center shadow-lg">
+            <CardContent className="p-4">
+              <p className="text-2xl font-extrabold text-emerald-700 sm:text-3xl">
+                {siteSettings.demographics.totalPopulation.toLocaleString("id-ID")}
               </p>
-              <p className="mt-1 text-sm font-semibold text-slate-600">
-                Luas Wilayah (km²)
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-emerald-200/80 bg-white text-center shadow-lg">
-            <CardContent className="p-4 sm:p-6">
-              <p className="text-3xl font-extrabold text-emerald-700 sm:text-4xl">
-                {villageStats.rwCount}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-slate-600">
-                Rukun Warga (RW)
+              <p className="mt-1 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                Total Penduduk (Jiwa)
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-2 border-emerald-200/80 bg-white text-center shadow-lg">
-            <CardContent className="p-4 sm:p-6">
-              <p className="text-3xl font-extrabold text-emerald-700 sm:text-4xl">
-                {villageStats.rtCount}
+          <Card className="border-2 border-emerald-200 bg-white text-center shadow-lg">
+            <CardContent className="p-4">
+              <p className="text-2xl font-extrabold text-emerald-700 sm:text-3xl">
+                {siteSettings.demographics.totalKK.toLocaleString("id-ID")}
               </p>
-              <p className="mt-1 text-sm font-semibold text-slate-600">
-                Rukun Tetangga (RT)
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-emerald-200/80 bg-white text-center shadow-lg">
-            <CardContent className="p-4 sm:p-6">
-              <p className="text-3xl font-extrabold text-emerald-700 sm:text-4xl">
-                {villageStats.population.toLocaleString("id-ID")}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-slate-600">
-                Jiwa Penduduk
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="col-span-2 border-2 border-emerald-200/80 bg-white text-center shadow-lg sm:col-span-4 lg:col-span-1">
-            <CardContent className="p-4 sm:p-6">
-              <p className="text-3xl font-extrabold text-emerald-700 sm:text-4xl">
-                {villageStats.familyCount.toLocaleString("id-ID")}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-slate-600">
+              <p className="mt-1 text-xs font-bold text-slate-600 uppercase tracking-wider">
                 Kepala Keluarga (KK)
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-blue-200 bg-blue-50/50 text-center shadow-lg">
+            <CardContent className="p-4">
+              <p className="text-2xl font-extrabold text-blue-800 sm:text-3xl">
+                {siteSettings.demographics.malePopulation.toLocaleString("id-ID")}
+              </p>
+              <p className="mt-1 text-xs font-bold text-blue-900 uppercase tracking-wider">
+                Laki-laki (Jiwa)
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-pink-200 bg-pink-50/50 text-center shadow-lg">
+            <CardContent className="p-4">
+              <p className="text-2xl font-extrabold text-pink-700 sm:text-3xl">
+                {siteSettings.demographics.femalePopulation.toLocaleString("id-ID")}
+              </p>
+              <p className="mt-1 text-xs font-bold text-pink-900 uppercase tracking-wider">
+                Perempuan (Jiwa)
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-amber-200 bg-amber-50/50 text-center shadow-lg">
+            <CardContent className="p-4">
+              <p className="text-2xl font-extrabold text-amber-800 sm:text-3xl">
+                {siteSettings.demographics.rtCount} / {siteSettings.demographics.rwCount}
+              </p>
+              <p className="mt-1 text-xs font-bold text-amber-900 uppercase tracking-wider">
+                Jumlah RT / RW
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-emerald-200 bg-white text-center shadow-lg">
+            <CardContent className="p-4">
+              <p className="text-2xl font-extrabold text-emerald-700 sm:text-3xl">
+                {siteSettings.demographics.areaSize}
+              </p>
+              <p className="mt-1 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                Luas Wilayah
               </p>
             </CardContent>
           </Card>
@@ -147,9 +164,119 @@ export default function ProfilPage() {
       </section>
 
       {/* ============================================ */}
+      {/* GAMBARAN UMUM & BATAS WILAYAH */}
+      {/* ============================================ */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Gambaran Umum */}
+          <div className="lg:col-span-2">
+            <Card className="h-full border-2 border-slate-200 shadow-md">
+              <CardContent className="p-6 sm:p-8">
+                <div className="mb-4 flex items-center gap-3 border-b border-slate-100 pb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-700 text-white">
+                    <Building className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-extrabold text-slate-900">
+                      Gambaran Umum Wilayah
+                    </h2>
+                    <p className="text-sm font-semibold text-emerald-700">
+                      Profil & Karakteristik Kelurahan Bubulak
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-lg leading-relaxed text-slate-700 bg-slate-50 p-6 rounded-2xl border border-slate-200/80">
+                  {siteSettings.overviewText}
+                </p>
+
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                    <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
+                      Ketinggian Wilayah
+                    </p>
+                    <p className="text-xl font-extrabold text-emerald-800 mt-0.5">
+                      {siteSettings.demographics.altitude}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                    <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
+                      Luas Total Wilayah
+                    </p>
+                    <p className="text-xl font-extrabold text-emerald-800 mt-0.5">
+                      {siteSettings.demographics.areaSize}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Batas Wilayah */}
+          <div>
+            <Card className="h-full border-2 border-emerald-300 bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 text-white shadow-lg">
+              <CardContent className="p-6 sm:p-8">
+                <div className="mb-6 flex items-center gap-3 border-b border-emerald-700/60 pb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md">
+                    <Compass className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-extrabold text-white">
+                      Batas Wilayah
+                    </h2>
+                    <p className="text-xs text-emerald-200">
+                      Kelurahan Bubulak
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="rounded-xl bg-white/10 p-3.5 backdrop-blur-sm border border-white/10">
+                    <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                      Sebelah Utara
+                    </p>
+                    <p className="text-base font-bold text-white mt-0.5">
+                      {siteSettings.boundaries.north}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl bg-white/10 p-3.5 backdrop-blur-sm border border-white/10">
+                    <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                      Sebelah Selatan
+                    </p>
+                    <p className="text-base font-bold text-white mt-0.5">
+                      {siteSettings.boundaries.south}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl bg-white/10 p-3.5 backdrop-blur-sm border border-white/10">
+                    <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                      Sebelah Barat
+                    </p>
+                    <p className="text-base font-bold text-white mt-0.5">
+                      {siteSettings.boundaries.west}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl bg-white/10 p-3.5 backdrop-blur-sm border border-white/10">
+                    <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                      Sebelah Timur
+                    </p>
+                    <p className="text-base font-bold text-white mt-0.5">
+                      {siteSettings.boundaries.east}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
       {/* VISI & MISI */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-sm font-bold text-emerald-800">
             <Target className="h-4 w-4" /> Visi & Misi
@@ -209,16 +336,16 @@ export default function ProfilPage() {
       </section>
 
       {/* ============================================ */}
-      {/* STRUKTUR ORGANISASI & PEGAWAI */}
+      {/* STRUKTUR ORGANISASI & PEGAWAI (RESMI TAHUN 2026) */}
       {/* ============================================ */}
-      <section className="bg-slate-50 py-12 sm:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-slate-50 py-12 sm:py-16 border-t border-b border-slate-200">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-sm font-bold text-emerald-800">
-              <Users className="h-4 w-4" /> Aparatur Kelurahan
+              <Users className="h-4 w-4" /> Aparatur Kelurahan Resmi (2026)
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-              Struktur Organisasi Pegawai
+            <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              Struktur Organisasi Pegawai Kelurahan Bubulak
             </h2>
             <p className="mt-2 text-lg text-slate-600">
               Jajaran aparatur pemerintah Kelurahan Bubulak yang siap melayani warga
@@ -233,38 +360,46 @@ export default function ProfilPage() {
                   key={staff.id}
                   className={`overflow-hidden border-2 transition-all duration-300 ${
                     isLurah
-                      ? "border-amber-400 bg-gradient-to-b from-amber-50/50 to-white shadow-xl ring-2 ring-amber-300 sm:col-span-2 lg:col-span-3 max-w-md mx-auto w-full"
+                      ? "border-amber-400 bg-gradient-to-b from-amber-50/60 to-white shadow-xl ring-2 ring-amber-300 sm:col-span-2 lg:col-span-3 max-w-xl mx-auto w-full"
                       : "border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg"
                   }`}
                 >
                   <CardContent className="p-6 text-center">
-                    {/* Staff Photo Placeholder */}
+                    {/* Staff Photo / Placeholder */}
                     <div
-                      className={`mx-auto mb-4 flex items-center justify-center rounded-2xl shadow-md ${
+                      className={`mx-auto mb-4 overflow-hidden rounded-2xl shadow-md border-2 ${
                         isLurah
-                          ? "h-28 w-28 bg-emerald-800 text-white ring-4 ring-amber-300"
-                          : "h-20 w-20 bg-emerald-700 text-white"
-                      }`}
+                          ? "h-32 w-32 bg-emerald-900 text-white border-amber-400 ring-4 ring-amber-200"
+                          : "h-24 w-24 bg-emerald-800 text-white border-emerald-300"
+                      } flex items-center justify-center relative`}
                     >
-                      <Landmark className={isLurah ? "h-14 w-14" : "h-10 w-10"} />
+                      {staff.photoUrl && (staff.photoUrl.startsWith("http") || (staff.photoUrl.startsWith("/") && !staff.photoUrl.includes("placeholder"))) ? (
+                        <img
+                          src={staff.photoUrl}
+                          alt={staff.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <Landmark className={isLurah ? "h-16 w-16 text-white/40" : "h-12 w-12 text-white/40"} />
+                      )}
                     </div>
 
                     {isLurah && (
-                      <Badge className="mb-2 bg-amber-500 text-white font-bold text-xs uppercase tracking-wider">
-                        Pimpinan Utama
+                      <Badge className="mb-2 bg-amber-600 text-white font-extrabold text-xs uppercase tracking-wider">
+                        Lurah Bubulak
                       </Badge>
                     )}
 
                     <h3
-                      className={`font-bold text-slate-900 ${
+                      className={`font-extrabold text-slate-900 ${
                         isLurah ? "text-xl sm:text-2xl" : "text-lg"
                       }`}
                     >
                       {staff.name}
                     </h3>
                     <p
-                      className={`mt-1 font-semibold ${
-                        isLurah ? "text-base text-emerald-800" : "text-sm text-emerald-700"
+                      className={`mt-1 font-bold ${
+                        isLurah ? "text-base text-emerald-800" : "text-sm text-emerald-700 uppercase"
                       }`}
                     >
                       {staff.position}
@@ -280,7 +415,7 @@ export default function ProfilPage() {
       {/* ============================================ */}
       {/* PRESTASI KELURAHAN */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-1.5 text-sm font-bold text-amber-900">
             <Award className="h-4 w-4 text-amber-700" /> Penghargaan

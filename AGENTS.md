@@ -33,12 +33,12 @@ Setiap kali merombak, membuat, atau memperbaiki komponen UI/UX dan halaman pada 
 2. [02_srs_requirements.md](file:///home/gif/kkn/kelurahan-bubulak/docs/02_srs_requirements.md) - Kebutuhan Fungsional & Non-Fungsional (Performance HP Kentang, WCAG AA, Lighthouse 90+).
 3. [03_ui_design_system.md](file:///home/gif/kkn/kelurahan-bubulak/docs/03_ui_design_system.md) - **PANDUAN WAKTU UTAMA UI DESIGN SYSTEM** (Palette Warna, Tipografi, Bento Grid, Tactile Buttons, & Low-End GPU Transition).
 4. [04_roadmap_sprint.md](file:///home/gif/kkn/kelurahan-bubulak/docs/04_roadmap_sprint.md) - Rencana Tahapan Eksekusi Rombak UI Per Halaman.
-5. [05_phase2_beranda_blueprint.md](file:///home/gif/kkn/kelurahan-bubulak/docs/05_phase2_beranda_blueprint.md) - **BLUEPRINT TEKNIS TAHAP 2**: Perombakan Layout Utama, Navbar, Footer, & Beranda Publik.
+5. [05_phase2_beranda_blueprint.md](file:///home/gif/kkn/kelurahan-bubulak/docs/05_phase2_beranda_blueprint.md) - **BLUEPRINT TEKNIS TAHAP 2**: Perombakan Layout Utama, Navbar, Footer, & Beranda Publik (Clean Vertical Layout).
 6. [06_phase3_layanan_publik_blueprint.md](file:///home/gif/kkn/kelurahan-bubulak/docs/06_phase3_layanan_publik_blueprint.md) - **BLUEPRINT TEKNIS TAHAP 3**: Perombakan Seluruh Halaman Publik (/layanan, /ajukan, /cek-resi, /laporan, /profil, /berita, /umkm).
 
 ### ⚠️ PERATURAN MUTLAK KODING UI:
+- **BERANDA LAYOUT VERTIKAL**: Beranda publik menggunakan susunan vertikal lapang (7 Urutan Seksi) dengan jam WIB format `HH:mm WIB` (tanpa detik).
 - **WAJIB CEK UI DESIGN SYSTEM & BLUEPRINT**: Sebelum membuat atau mengedit komponen UI baru, agent **HARUS SELALU MENGECEK** [`docs/03_ui_design_system.md`](file:///home/gif/kkn/kelurahan-bubulak/docs/03_ui_design_system.md), [`docs/05_phase2_beranda_blueprint.md`](file:///home/gif/kkn/kelurahan-bubulak/docs/05_phase2_beranda_blueprint.md), dan [`docs/06_phase3_layanan_publik_blueprint.md`](file:///home/gif/kkn/kelurahan-bubulak/docs/06_phase3_layanan_publik_blueprint.md).
-- **EKSEKUSI TAHAP 3 KONSISTEN**: Saat kodingan Tahap 3 dimulai, agent WAJIB mengikuti urutan blueprint secara bertahap dan terstruktur.
 - **OPTIMASI HP KENTANG**: Dilarang menggunakan backdrop-blur bertumpuk/berat (`backdrop-blur-xl`), efek 3D berat, atau JS infinite animation yang membebankan HP spesifikasi rendah.
 - **KONTRAST TINGGI**: Pastikan semua teks mudah dibaca oleh warga (WCAG AA).
 - **TOUCH TARGET**: Tombol mobile minimal memiliki area sentuh 44x44px.

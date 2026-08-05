@@ -244,6 +244,10 @@ export default function UmkmPage() {
               <BentoGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredUmkm.map((item) => {
                   const IconComp = getUmkmCategoryIcon(item.category);
+                  const mapDirectUrl = item.googleMapsUrl && item.googleMapsUrl.startsWith("http")
+                    ? item.googleMapsUrl
+                    : `https://maps.google.com/maps?q=${encodeURIComponent(item.businessName + ", Kelurahan Bubulak, Kota Bogor")}`;
+
                   return (
                     <div
                       key={item.id}
@@ -302,17 +306,15 @@ export default function UmkmPage() {
                             <MessageSquare className="h-4 w-4" />
                             Pesan via WhatsApp
                           </a>
-                          {item.googleMapsUrl && (
-                            <a
-                              href={item.googleMapsUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 min-h-[40px]"
-                            >
-                              <ExternalLink className="h-3.5 w-3.5" />
-                              Buka di Google Maps
-                            </a>
-                          )}
+                          <a
+                            href={mapDirectUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 min-h-[40px]"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                            Buka Lokasi di Google Maps
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -364,20 +366,21 @@ export default function UmkmPage() {
           </section>
 
           <section className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-            {/* Embed Google Maps General Overview */}
+            {/* Embed Google Maps General Overview (Zero API Key Method) */}
             <div className="mb-8 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xs">
               <div className="bg-slate-900 p-4 text-white font-extrabold flex items-center gap-2 text-sm">
                 <MapPin className="h-4 w-4 text-emerald-400" />
                 Peta Lokasi Wilayah Kelurahan Bubulak
               </div>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.279534855508!2d106.77264231432858!3d-6.619856095233186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5d23b9f2b2d%3A0x4027a76e3530d40!2sKelurahan%20Bubulak!5e0!3m2!1sid!2sid!4v1690000000000!5m2!1sid!2sid"
+                src="https://maps.google.com/maps?q=Kelurahan+Bubulak,+Bogor+Barat,+Kota+Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 width="100%"
-                height="300"
+                height="320"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
-                title="Peta Umum Kelurahan Bubulak"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Peta Lokasi Kelurahan Bubulak"
               />
             </div>
 
@@ -400,6 +403,10 @@ export default function UmkmPage() {
               <BentoGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredPlaces.map((place) => {
                   const IconComp = getPlaceCategoryIcon(place.category);
+                  const mapPlaceUrl = place.googleMapsUrl && place.googleMapsUrl.startsWith("http")
+                    ? place.googleMapsUrl
+                    : `https://maps.google.com/maps?q=${encodeURIComponent(place.name + ", " + place.address + ", Kelurahan Bubulak, Kota Bogor")}`;
+
                   return (
                     <BentoCard
                       key={place.id}
@@ -420,7 +427,7 @@ export default function UmkmPage() {
                       </div>
 
                       <a
-                        href={place.googleMapsUrl}
+                        href={mapPlaceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 text-xs font-extrabold text-white transition-colors hover:bg-emerald-800 min-h-[44px]"

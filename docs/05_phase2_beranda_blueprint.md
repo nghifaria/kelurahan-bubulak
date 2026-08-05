@@ -1,4 +1,4 @@
-# 05. Blueprint Teknis Tahap 2: Layout Utama & Rombak Beranda
+# 05. Blueprint Teknis Tahap 2: Layout Utama & Rombak Beranda (Clean Vertical Layout)
 
 Dokumen ini memuat arsitektur teknis detail dan blueprint komponen untuk eksekusi **Tahap 2 (Rombak Layout Utama, Navbar, Footer, & Beranda Publik)**.
 
@@ -14,50 +14,43 @@ Dokumen ini memuat arsitektur teknis detail dan blueprint komponen untuk eksekus
 - **Navigasi Cepat Mobile**: Mobile drawer menu slide-in ringan tanpa animasi JS bertumpuk.
 
 ### B. Komponen Footer Informatif & Respon Cepat (`components/footer.tsx`)
-- **Struktur Footer**: Dark Slate Neutral (`bg-slate-900 text-slate-100 border-t border-slate-800`).
+- **Struktur Footer**: Dark Slate Neutral (`bg-slate-950 text-slate-200 border-t border-slate-800`).
 - **Informasi Kontak Darurat**: Nomor telepon darurat kelurahan (Bhabinkamtibmas, Babinsa, Ambulans) dengan tombol panggilan sekali sentuh.
 - **Link Navigasi & Jam Kerja**: Menyajikan jam kerja WIB, alamat resmi kantor, dan tautan sosial media resmi.
 
 ---
 
-## 📦 2. Rancangan Bento Grid & Komponen Beranda (`app/page.tsx`)
+## 📦 2. Rancangan Layout Vertikal Minimalis Beranda (`app/page.tsx`)
 
-### A. Section 1: Hero Section Sleek & Search Bar Pintar
-- **Headline**: High-contrast typography `Plus Jakarta Sans` / `Inter` (`text-4xl sm:text-5xl font-extrabold text-slate-900`).
-- **Sub-headline**: Penjelasan tegas layanan digital tanpa antre.
-- **Search Bar Pintar / Quick Action**: Form pencarian cepat jenis surat atau tombol sekali sentuh menuju katalog syarat surat & ajukan online.
-
-### B. Section 2: Layout Bento Grid 6-Card Architecture
-Halaman depan menggunakan susunan **Bento Grid 6 Kartu Utama** berdesain Linear-style:
+Bento Grid pada Beranda telah dibongkar dan digantikan dengan **Layout Vertikal Lapang (Scroll Ke Bawah)** ber-spacing lega (`space-y-12`):
 
 ```
-+------------------------------------------+------------------------------------------+
-| Card 1: Widget Status Jam Operasional    | Card 2: Akses Cepat Surat & Cek Resi     |
-| (Live Clock WIB & Lencana Buka/Tutup)    | (Tombol Pintas Sekali Sentuh Warga)      |
-+------------------------------------------+------------------------------------------+
-| Card 3: Statistik Demografi Penduduk     | Card 4: Berita & Pengumuman Terkini      |
-| (18.724 Jiwa, 5.732 KK, 50 RT / 13 RW)   | (Live Feed Berita Resmi Kelurahan)       |
-+------------------------------------------+------------------------------------------+
-| Card 5: Unggulan UMKM & Tempat Umum      | Card 6: Banner Panggil Pengaduan Warga   |
-| (Direktori Usaha Lokal Terverifikasi)    | (Kanal Aspirasi & Aduan Warga Live)      |
-+------------------------------------------+------------------------------------------+
+1. [HERO SECTION & SAMBUTAN LURAH]
+   - Banner Selamat Datang di Kelurahan Bubulak
+   - Kartu Sambutan & Profil Lurah ANJAR APRIYANA, S.Sos., M.Si
+
+2. [AKSES PINTAS LAYANAN (QUICK ACCESS)]
+   - 4 Kartu Pintas: Ajukan Surat, Cek Resi, Syarat Berkas, Pengaduan
+
+3. [JADWAL & STATUS OPERASIONAL WIB]
+   - Container khusus Jam Realtime WIB (HH:mm WIB - TANPA DETIK!)
+   - Lencana Status BUKA / TUTUP
+
+4. [DEMOGRAFI & STATISTIK PENDUDUK]
+   - Grid 4-kolom: 18.724 Jiwa, 5.732 KK, 50 RT / 13 RW, 157,085 Ha
+
+5. [BERITA & PENGUMUMAN TERKINI]
+   - Live Feed 3 Berita Terbaru + Tombol "Lihat Semua Berita"
+
+6. [DIREKTORI UNGGULAN UMKM LOKAL]
+   - Highlight produk warga terverifikasi + Kontak WA langsung
+
+7. [BANNER PANGGIL PENGADUAN & KONTAK DARURAT]
+   - Banner Dark Slate penutup sebelum Footer
 ```
 
-1. **Card 1 (Widget Status & Live WIB Clock)**:
-   - Menampilkan jam, menit, detik live WIB dengan lencana **BUKA** (hijau emerald) atau **TUTUP** (amber/dark).
-2. **Card 2 (Akses Cepat Pengajuan Surat & Cek Resi)**:
-   - Kartu taktil berisikan tombol pintas: *Ajukan Surat Online*, *Cek Syarat*, dan *Lacak Nomor Resi Ticket*.
-3. **Card 3 (Statistik Ringkas Warga)**:
-   - Menampilkan total penduduk (18.724), KK (5.732), serta jumlah RT (50) & RW (13) yang diambil live dari database INSForge `site_settings`.
-4. **Card 4 (Berita & Pengumuman Terkini)**:
-   - Ringkasan 3 berita terbaru dari database dengan badge kategori, tanggal terbit, dan cover image.
-5. **Card 5 (Direktori Unggulan UMKM Lokal)**:
-   - Highlight produk UMKM warga Bubulak terverifikasi lengkap dengan link kontak WhatsApp pemesanan langsung.
-6. **Card 6 (Layanan Pengaduan & Aspirasi Warga)**:
-   - Banner panggil aksi cepat untuk melaporkan kendala fasilitas atau lingkungan warga.
-
-### C. Section 3: Sambutan Lurah & Profil Ringkas
-- Menampilkan foto & narasi resmi Lurah Bubulak **ANJAR APRIYANA, S.Sos., M.Si**, beserta visualisasi gambaran umum wilayah kelurahan.
+### Rincian Perbaikan Komponen Operasional Jam WIB:
+- **Jam Realtime WIB**: Menggunakan format `HH:mm WIB` (contoh: `14:48 WIB`), **TANPA MENAMPILKAN DETIK** sesuai permintaan standar kenyamanan mata warga.
 
 ---
 
@@ -69,7 +62,3 @@ Halaman depan menggunakan susunan **Bento Grid 6 Kartu Utama** berdesain Linear-
    - Status Text: `text-emerald-800` (Buka/Selesai), `text-amber-800` (Pending/Tutup), `text-red-800` (Ditolak).
 2. **Eliminasi Blur Heavy Effects**:
    - Menggantikan `backdrop-blur-xl` dengan subtle border 1px `border-slate-200` atau `border-emerald-200/80`.
-3. **Modul Komponen Baru yang Akan Dibuat**:
-   - `components/BentoGrid.tsx`: Container layout Bento Grid responsif.
-   - `components/BentoCard.tsx`: Komponen wrapper kartu taktil dengan hover border.
-   - `components/EmergencyBanner.tsx`: Widget banner nomor kontak darurat warga.

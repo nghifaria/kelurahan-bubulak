@@ -12,6 +12,7 @@ import {
   Building,
   CheckCircle2,
   Compass,
+  MapPin,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -191,6 +192,25 @@ export default async function ProfilPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PETA LOKASI WILAYAH GOOGLE MAPS (ZERO API KEY METHOD) */}
+      <section className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xs">
+          <div className="bg-slate-900 p-4 text-white font-extrabold flex items-center gap-2 text-sm">
+            <MapPin className="h-4 w-4 text-emerald-400" />
+            Peta Lokasi Kantor Kelurahan Bubulak
+          </div>
+          <iframe
+            src="https://maps.google.com/maps?q=Kelurahan+Bubulak,+Bogor+Barat,+Kota+Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            className="w-full h-[320px] min-h-[300px]"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Peta Lokasi Kelurahan Bubulak"
+          />
         </div>
       </section>
 

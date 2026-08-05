@@ -1,13 +1,10 @@
 import {
   Landmark,
   MapPin,
-  Mail,
-  Globe,
   MessageSquare,
   ExternalLink,
   PhoneCall,
   Clock,
-  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { siteSettings } from "@/lib/data";
@@ -45,10 +42,10 @@ export default function Footer() {
               <p>{siteSettings.officeAddress}</p>
             </div>
 
-            {/* Google Maps Embed */}
+            {/* Google Maps Public Embed (Zero API Key Method) */}
             <div className="overflow-hidden rounded-2xl border border-slate-800 shadow-sm">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.279534855508!2d106.77264231432858!3d-6.619856095233186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5d23b9f2b2d%3A0x4027a76e3530d40!2sKelurahan%20Bubulak!5e0!3m2!1sid!2sid!4v1690000000000!5m2!1sid!2sid"
+                src="https://maps.google.com/maps?q=Kelurahan+Bubulak,+Bogor+Barat,+Kota+Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="160"
                 style={{ border: 0 }}

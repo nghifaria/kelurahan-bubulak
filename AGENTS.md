@@ -24,3 +24,18 @@ Key patterns:
 - Reference users with `auth.users(id)`; use `auth.uid()` in RLS policies.
 - For storage uploads, persist both the returned `url` and `key`.
 <!-- INSFORGE:END -->
+
+## 📚 DOKUMENTASI PROYEK & ATURAN PENGODINGAN UI/UX
+
+Setiap kali merombak, membuat, atau memperbaiki komponen UI/UX dan halaman pada website Kelurahan Bubulak, **AGENT WAJIB MEMBACA & MEMATUHI SELURUH ATURAN** yang tertulis dalam folder `/docs`:
+
+1. [01_project_brief.md](file:///home/gif/kkn/kelurahan-bubulak/docs/01_project_brief.md) - Ringkasan Eksekutif & Identitas Desain Modern Minimalist / Bento Grid.
+2. [02_srs_requirements.md](file:///home/gif/kkn/kelurahan-bubulak/docs/02_srs_requirements.md) - Kebutuhan Fungsional & Non-Fungsional (Performance HP Kentang, WCAG AA, Lighthouse 90+).
+3. [03_ui_design_system.md](file:///home/gif/kkn/kelurahan-bubulak/docs/03_ui_design_system.md) - **PANDUAN WAKTU UTAMA UI DESIGN SYSTEM** (Palette Warna, Tipografi, Bento Grid, Tactile Buttons, & Low-End GPU Transition).
+4. [04_roadmap_sprint.md](file:///home/gif/kkn/kelurahan-bubulak/docs/04_roadmap_sprint.md) - Rencana Tahapan Eksekusi Rombak UI Per Halaman.
+
+### ⚠️ PERATURAN MUTLAK KODING UI:
+- **WAJIB CEK UI DESIGN SYSTEM**: Sebelum membuat atau mengedit komponen UI baru, agent **HARUS SELALU MENGECEK** [`docs/03_ui_design_system.md`](file:///home/gif/kkn/kelurahan-bubulak/docs/03_ui_design_system.md).
+- **OPTIMASI HP KENTANG**: Dilarang menggunakan backdrop-blur bertumpuk/berat (`backdrop-blur-xl`), efek 3D berat, atau JS infinite animation yang membebankan HP spesifikasi rendah.
+- **KONTRAST TINGGI**: Pastikan semua teks mudah dibaca oleh warga (WCAG AA).
+- **TOUCH TARGET**: Tombol mobile minimal memiliki area sentuh 44x44px.

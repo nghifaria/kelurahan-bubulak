@@ -108,85 +108,54 @@ export default function LayananPage() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col space-y-8 pb-12 bg-slate-50">
       {/* ============================================ */}
-      {/* PAGE HEADER */}
+      {/* PAGE HEADER SLEEK LINEAR DARK */}
       {/* ============================================ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-800">
-        {/* Decorative */}
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 sm:py-16 lg:px-8">
-          {/* Breadcrumb */}
-          <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-emerald-200">
-            <Link href="/" className="transition-colors hover:text-white">
+      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-800 to-slate-900 text-white pt-12 pb-16">
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <nav className="mb-4 flex items-center justify-center gap-2 text-xs font-semibold text-emerald-200">
+            <Link href="/" className="hover:text-white">
               Beranda
             </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="font-medium text-white">Syarat Pelayanan</span>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="text-white">Katalog Syarat Surat</span>
           </nav>
 
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-100 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4" />
-            Katalog Lengkap
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-4 py-1.5 text-xs font-bold text-emerald-200">
+            <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+            Panduan Lengkap Persyaratan
           </div>
 
-          <h1 className="mb-4 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+          <h1 className="mb-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl tracking-tight">
             Syarat Pelayanan Surat
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-emerald-100/90">
-            Cari dan temukan daftar berkas yang dibutuhkan untuk setiap jenis
-            surat administrasi kelurahan. Tidak perlu lagi datang hanya untuk
-            bertanya!
+          <p className="mx-auto max-w-2xl text-base text-emerald-100/90 leading-relaxed font-medium">
+            Temukan daftar berkas & persyaratan lengkap setiap surat kependudukan. Siapkan dokumen dari rumah sebelum mengajukan!
           </p>
-        </div>
-
-        {/* Wave Divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            viewBox="0 0 1440 60"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0 24L80 28C160 32 320 40 480 42C640 44 800 40 960 34C1120 28 1280 20 1360 16L1440 12V60H1360C1280 60 1120 60 960 60C800 60 640 60 480 60C320 60 160 60 80 60H0V24Z"
-              className="fill-background"
-            />
-          </svg>
         </div>
       </section>
 
       {/* ============================================ */}
-      {/* SEARCH BAR */}
+      {/* SEARCH BAR PINTAR */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-4xl px-4 -mt-2 sm:px-6 lg:px-8">
-        <Card className="border-2 border-emerald-200/60 shadow-xl">
-          <CardContent className="p-4 sm:p-6">
+      <section className="mx-auto w-full max-w-4xl px-4 -mt-8 sm:px-6 lg:px-8 z-10">
+        <Card className="border border-slate-200 shadow-md rounded-3xl bg-white">
+          <CardContent className="p-4 sm:p-5">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 text-emerald-600" />
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
               <Input
                 type="search"
                 placeholder='Cari jenis surat... (contoh: "nikah", "kematian", "domisili")'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-14 rounded-xl border-2 border-emerald-200 pl-14 pr-4 text-lg placeholder:text-slate-400 focus:border-emerald-500 focus:ring-emerald-500 sm:h-16 sm:text-xl"
+                className="h-14 rounded-2xl border-2 border-slate-200 pl-12 pr-4 text-base font-bold text-slate-900 placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 transition-all min-h-[48px]"
               />
             </div>
             {searchQuery && (
-              <p className="mt-3 text-base text-slate-600">
+              <p className="mt-2.5 text-xs font-bold text-slate-600">
                 Ditemukan{" "}
-                <span className="font-bold text-emerald-700">
+                <span className="text-emerald-700">
                   {filteredServices.length}
                 </span>{" "}
                 layanan
@@ -195,7 +164,7 @@ export default function LayananPage() {
                     . Coba kata kunci lain atau{" "}
                     <button
                       onClick={() => setSearchQuery("")}
-                      className="font-semibold text-emerald-700 underline"
+                      className="text-emerald-700 underline"
                     >
                       reset pencarian
                     </button>
@@ -210,16 +179,15 @@ export default function LayananPage() {
       {/* ============================================ */}
       {/* ACCORDION FAQ SECTION */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <section className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
         {filteredServices.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center">
-            <FileText className="mx-auto mb-4 h-16 w-16 text-slate-300" />
-            <h3 className="mb-2 text-xl font-bold text-slate-700">
-              Tidak Ada Hasil
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-xs">
+            <FileText className="mx-auto mb-3 h-12 w-12 text-slate-400" />
+            <h3 className="mb-1 text-lg font-bold text-slate-800">
+              Layanan Tidak Ditemukan
             </h3>
-            <p className="text-lg text-slate-500">
-              Layanan dengan kata kunci &ldquo;{searchQuery}&rdquo; tidak
-              ditemukan. Silakan coba kata kunci lain.
+            <p className="text-sm text-slate-500">
+              Kata kunci &ldquo;{searchQuery}&rdquo; tidak cocok dengan jenis surat manapun.
             </p>
           </div>
         ) : (
@@ -227,14 +195,14 @@ export default function LayananPage() {
             {categories.map((category) => (
               <div key={category}>
                 {/* Category Header */}
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="h-1 w-6 rounded-full bg-emerald-600" />
-                  <h2 className="text-xl font-bold text-slate-800 sm:text-2xl">
+                <div className="mb-3 flex items-center gap-2.5">
+                  <div className="h-2 w-2 rounded-full bg-emerald-600" />
+                  <h2 className="text-lg font-extrabold text-slate-900 sm:text-xl">
                     {category}
                   </h2>
                   <Badge
                     variant="secondary"
-                    className="bg-emerald-100 text-emerald-800 text-sm"
+                    className="bg-emerald-50 text-emerald-800 border border-emerald-200/60 text-xs font-bold"
                   >
                     {
                       filteredServices.filter((s) => s.category === category)
@@ -256,42 +224,42 @@ export default function LayananPage() {
                       <AccordionItem
                         key={service.id}
                         value={idx}
-                        className="overflow-hidden rounded-xl border-2 border-slate-200 bg-white shadow-sm transition-all data-[open]:border-emerald-300 data-[open]:shadow-lg"
+                        className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs transition-all data-[open]:border-emerald-300 data-[open]:shadow-sm"
                       >
-                        <AccordionTrigger className="cursor-pointer px-5 py-5 text-left hover:no-underline sm:px-6 [&[data-open]>div>.icon-wrap]:bg-emerald-700 [&[data-open]>div>.icon-wrap]:text-white">
+                        <AccordionTrigger className="cursor-pointer px-5 py-4 text-left hover:no-underline [&[data-open]>div>.icon-wrap]:bg-emerald-700 [&[data-open]>div>.icon-wrap]:text-white">
                           <div className="flex w-full items-center gap-4">
-                            <div className="icon-wrap flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 transition-colors sm:h-14 sm:w-14">
-                              <service.icon className="h-6 w-6 sm:h-7 sm:w-7" />
+                            <div className="icon-wrap flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100/80 text-emerald-800 transition-colors">
+                              <service.icon className="h-5 w-5" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-base font-bold text-slate-900 sm:text-lg">
+                              <h3 className="text-base font-extrabold text-slate-900">
                                 {service.title}
                               </h3>
-                              <p className="mt-0.5 text-sm text-slate-500">
-                                {service.requirements.length} berkas diperlukan
+                              <p className="mt-0.5 text-xs font-semibold text-slate-500">
+                                {service.requirements.length} berkas persyaratan
                               </p>
                             </div>
                           </div>
                         </AccordionTrigger>
-                        <AccordionContent className="px-5 pb-6 sm:px-6">
+                        <AccordionContent className="px-5 pb-5 pt-1">
                           {/* Description */}
-                          <div className="mb-5 flex items-start gap-3 rounded-xl bg-emerald-50 p-4 text-base text-emerald-800">
-                            <Info className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+                          <div className="mb-4 flex items-start gap-3 rounded-xl bg-emerald-50/70 p-3.5 border border-emerald-200/60 text-sm font-medium text-emerald-900">
+                            <Info className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
                             <p>{service.description}</p>
                           </div>
 
                           {/* Checklist */}
-                          <h4 className="mb-3 flex items-center gap-2 text-base font-bold text-slate-800">
-                            <CheckSquare className="h-5 w-5 text-emerald-600" />
-                            Checklist Berkas yang Diperlukan:
+                          <h4 className="mb-2.5 flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                            <CheckSquare className="h-4 w-4 text-emerald-600" />
+                            Checklist Berkas Persyaratan:
                           </h4>
-                          <ul className="mb-6 space-y-2">
+                          <ul className="mb-5 space-y-2">
                             {service.requirements.map((req, reqIdx) => (
                               <li
                                 key={reqIdx}
-                                className="flex items-start gap-3 rounded-lg border border-slate-100 bg-slate-50 px-4 py-3 text-base text-slate-800 transition-colors hover:border-emerald-200 hover:bg-emerald-50"
+                                className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 py-2.5 text-sm font-medium text-slate-800"
                               >
-                                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 border-emerald-400 bg-white text-xs font-bold text-emerald-700">
+                                <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-700 text-[11px] font-bold text-white">
                                   {reqIdx + 1}
                                 </div>
                                 <span>{req}</span>
@@ -299,23 +267,29 @@ export default function LayananPage() {
                             ))}
                           </ul>
 
-                          {/* Action Buttons */}
-                          <div className="flex flex-col gap-3 sm:flex-row">
+                          {/* Action Buttons (Touch Target min 44px) */}
+                          <div className="flex flex-col gap-2.5 sm:flex-row">
                             <Button
                               onClick={() => handlePrint(service)}
                               variant="outline"
-                              className="h-12 flex-1 gap-2 rounded-xl border-2 border-emerald-300 text-base font-semibold text-emerald-800 hover:bg-emerald-50"
+                              className="h-12 flex-1 gap-2 rounded-xl border-2 border-slate-200 font-bold text-slate-800 hover:bg-slate-50 min-h-[44px]"
                             >
-                              <Printer className="h-5 w-5" />
-                              Cetak Ringkasan Syarat
+                              <Printer className="h-4 w-4" />
+                              Cetak Checklist
                             </Button>
                             <Button
                               onClick={() => handleWhatsApp(service)}
-                              className="h-12 flex-1 gap-2 rounded-xl bg-emerald-700 text-base font-semibold text-white hover:bg-emerald-800"
+                              className="h-12 flex-1 gap-2 rounded-xl bg-emerald-700 font-bold text-white hover:bg-emerald-800 min-h-[44px]"
                             >
-                              <MessageSquare className="h-5 w-5" />
-                              Tanya via WhatsApp
+                              <MessageSquare className="h-4 w-4" />
+                              Tanya Staf WA
                             </Button>
+                            <Link
+                              href="/ajukan"
+                              className="h-12 flex-1 gap-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold flex items-center justify-center hover:bg-emerald-100 min-h-[44px]"
+                            >
+                              Ajukan Surat <ArrowRight className="h-4 w-4" />
+                            </Link>
                           </div>
                         </AccordionContent>
                       </AccordionItem>
@@ -328,38 +302,34 @@ export default function LayananPage() {
       </section>
 
       {/* ============================================ */}
-      {/* CTA BOTTOM */}
+      {/* BOTTOM CTA CARD */}
       {/* ============================================ */}
-      <section className="bg-slate-50 py-12">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <Card className="overflow-hidden border-2 border-emerald-200/60 bg-gradient-to-br from-emerald-50 to-white shadow-lg">
-            <CardContent className="p-8 sm:p-12">
-              <h2 className="mb-3 text-2xl font-bold text-slate-900 sm:text-3xl">
-                Sudah Tahu Syaratnya?
-              </h2>
-              <p className="mx-auto mb-6 max-w-xl text-lg text-slate-600">
-                Langsung ajukan surat secara online tanpa harus datang ke kantor
-                kelurahan. Dokumen Anda akan diproses dan Anda bisa memantau
-                statusnya secara real-time.
-              </p>
-              <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-                <Link
-                  href="/ajukan"
-                  className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-8 text-lg font-bold text-white shadow-lg transition-all hover:bg-emerald-800 sm:w-auto"
-                >
-                  Ajukan Surat Online
-                  <ArrowRight className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="/cek-resi"
-                  className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl border-2 border-emerald-300 px-8 text-lg font-bold text-emerald-800 transition-all hover:bg-emerald-50 sm:w-auto"
-                >
-                  Cek Status Pengajuan
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      <section className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+        <Card className="overflow-hidden border border-slate-200 bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-3xl shadow-sm">
+          <CardContent className="p-6 sm:p-10 text-center">
+            <h2 className="mb-2 text-2xl font-extrabold text-white">
+              Sudah Lengkap Berkasnya?
+            </h2>
+            <p className="mx-auto mb-6 max-w-xl text-sm text-emerald-100/90 font-medium">
+              Langsung ajukan surat secara online tanpa harus antre di kantor kelurahan. Anda akan mendapatkan Nomor Resi Ticket untuk melacak progresnya.
+            </p>
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/ajukan"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-6 text-sm font-extrabold text-slate-950 shadow-sm transition-all hover:bg-emerald-400 sm:w-auto min-h-[48px]"
+              >
+                Ajukan Surat Online Sekarang
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/cek-resi"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-white/10 px-6 text-sm font-extrabold text-white hover:bg-white/20 sm:w-auto min-h-[48px]"
+              >
+                Cek Status Resi
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

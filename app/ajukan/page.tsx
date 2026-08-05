@@ -82,85 +82,59 @@ export default function AjukanSuratPage() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col space-y-8 pb-12 bg-slate-50">
       {/* ============================================ */}
-      {/* PAGE HEADER */}
+      {/* PAGE HEADER LINEAR DARK */}
       {/* ============================================ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-800">
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 sm:py-16 lg:px-8">
-          <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-emerald-200">
-            <Link href="/" className="transition-colors hover:text-white">
+      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-800 to-slate-900 text-white pt-12 pb-16">
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <nav className="mb-4 flex items-center justify-center gap-2 text-xs font-semibold text-emerald-200">
+            <Link href="/" className="hover:text-white">
               Beranda
             </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="font-medium text-white">Ajukan Surat Online</span>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="text-white">Form Pengajuan Surat</span>
           </nav>
 
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-100 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4" />
-            Layanan Digital 24/7
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-4 py-1.5 text-xs font-bold text-emerald-200">
+            <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+            Layanan Mandiri Warga 24/7
           </div>
 
-          <h1 className="mb-4 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            Form Pengajuan Surat Digital
+          <h1 className="mb-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl tracking-tight">
+            Form Permohonan Surat Online
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-emerald-100/90">
-            Isi data diri dan unggah berkas fisik Anda. Setelah terkirim, Anda akan menerima nomor resi unik untuk melacak status dokumen Anda secara real-time.
+          <p className="mx-auto max-w-2xl text-base text-emerald-100/90 leading-relaxed font-medium">
+            Isi formulir dan unggah berkas Anda secara mandiri dari HP. Nomor resi otomatis diterbitkan setelah form dikirim.
           </p>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            viewBox="0 0 1440 60"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0 24L80 28C160 32 320 40 480 42C640 44 800 40 960 34C1120 28 1280 20 1360 16L1440 12V60H1360C1280 60 1120 60 960 60C800 60 640 60 480 60C320 60 160 60 80 60H0V24Z"
-              className="fill-background"
-            />
-          </svg>
         </div>
       </section>
 
       {/* ============================================ */}
       {/* FORM SECTION */}
       {/* ============================================ */}
-      <section className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-3xl px-4 -mt-8 sm:px-6 lg:px-8 z-10">
         {submittedResi ? (
           /* POP-UP RESI SUCCESS CARD */
-          <Card className="border-2 border-emerald-500 bg-gradient-to-br from-emerald-50 via-white to-emerald-50 shadow-2xl">
+          <Card className="border border-emerald-300 bg-white rounded-3xl shadow-md overflow-hidden">
             <CardContent className="p-8 text-center sm:p-12">
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xl">
-                <CheckCircle2 className="h-12 w-12" />
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-white shadow-sm">
+                <CheckCircle2 className="h-10 w-10" />
               </div>
 
-              <h2 className="mb-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">
-                Pengajuan Surat Berhasil Dibuat!
+              <h2 className="mb-2 text-2xl font-extrabold text-slate-900">
+                Pengajuan Surat Berhasil Terkirim!
               </h2>
-              <p className="mx-auto mb-6 max-w-lg text-lg text-slate-600">
-                Simpan dan catat **Nomor Resi Pelacakan** Anda di bawah ini untuk mengecek status permohonan surat secara berkala.
+              <p className="mx-auto mb-6 max-w-lg text-sm text-slate-600 font-medium">
+                Simpan **Nomor Resi Ticket** di bawah ini untuk mengecek status permohonan surat Anda kapan saja secara real-time.
               </p>
 
               {/* RESI DISPLAY BOX */}
-              <div className="mx-auto mb-8 max-w-md rounded-2xl border-2 border-emerald-300 bg-white p-6 shadow-inner">
-                <p className="text-sm font-semibold uppercase tracking-wider text-emerald-800">
-                  Nomor Resi Tiket Anda
+              <div className="mx-auto mb-6 max-w-md rounded-2xl border-2 border-emerald-200 bg-emerald-50/60 p-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-emerald-900">
+                  Nomor Resi Ticket Anda
                 </p>
-                <p className="mt-2 font-mono text-3xl font-extrabold text-emerald-700 tracking-wider">
+                <p className="mt-1 font-mono text-2xl sm:text-3xl font-extrabold text-emerald-800 tracking-wider">
                   {submittedResi}
                 </p>
 
@@ -168,17 +142,17 @@ export default function AjukanSuratPage() {
                   <Button
                     onClick={handleCopyResi}
                     variant="outline"
-                    className="gap-2 border-2 border-emerald-300 font-bold text-emerald-800 hover:bg-emerald-50"
+                    className="gap-2 border-2 border-emerald-300 font-bold text-emerald-900 hover:bg-emerald-100 min-h-[44px]"
                   >
                     {copied ? (
                       <>
-                        <Check className="h-4 w-4 text-emerald-600" />
-                        Tersalin!
+                        <Check className="h-4 w-4 text-emerald-700" />
+                        Kode Resi Tersalin!
                       </>
                     ) : (
                       <>
                         <Copy className="h-4 w-4" />
-                        Salin Kode Resi
+                        Salin Nomor Resi
                       </>
                     )}
                   </Button>
@@ -189,10 +163,10 @@ export default function AjukanSuratPage() {
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href={`/cek-resi?resi=${submittedResi}`}
-                  className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-8 text-lg font-bold text-white shadow-lg hover:bg-emerald-800 sm:w-auto"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-6 text-sm font-extrabold text-white shadow-sm hover:bg-emerald-800 sm:w-auto min-h-[48px]"
                 >
-                  <Search className="h-5 w-5" />
-                  Cek Status Pengajuan Ini
+                  <Search className="h-4 w-4" />
+                  Lacak Status Resi Ini
                 </Link>
 
                 <button
@@ -208,7 +182,7 @@ export default function AjukanSuratPage() {
                       fileName: "",
                     });
                   }}
-                  className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl border-2 border-slate-300 px-8 text-lg font-bold text-slate-700 hover:bg-slate-100 sm:w-auto"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 px-6 text-sm font-bold text-slate-800 hover:bg-slate-50 sm:w-auto min-h-[48px]"
                 >
                   Buat Pengajuan Baru
                 </button>
@@ -217,16 +191,16 @@ export default function AjukanSuratPage() {
           </Card>
         ) : (
           /* INPUT FORM */
-          <Card className="border-2 border-emerald-200/80 bg-white shadow-xl">
+          <Card className="border border-slate-200 bg-white rounded-3xl shadow-sm">
             <CardContent className="p-6 sm:p-10">
-              <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-slate-900 border-b border-slate-100 pb-4">
-                <FileText className="h-7 w-7 text-emerald-700" />
+              <h2 className="mb-6 flex items-center gap-2.5 text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4">
+                <FileText className="h-6 w-6 text-emerald-700" />
                 Formulir Permohonan Dokumen
               </h2>
 
               {errorMessage && (
-                <div className="mb-6 flex items-center gap-3 rounded-xl bg-red-50 p-4 border border-red-200 text-red-700 font-semibold text-base">
-                  <AlertCircle className="h-5 w-5 shrink-0" />
+                <div className="mb-6 flex items-center gap-3 rounded-2xl bg-red-50 p-4 border border-red-200 text-red-800 font-semibold text-sm">
+                  <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
                   <p>{errorMessage}</p>
                 </div>
               )}
@@ -234,7 +208,7 @@ export default function AjukanSuratPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Jenis Surat */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Jenis Surat yang Diminta <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -242,7 +216,7 @@ export default function AjukanSuratPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, serviceTypeId: e.target.value })
                     }
-                    className="w-full h-14 rounded-xl border-2 border-slate-200 px-4 text-lg font-medium text-slate-900 focus:border-emerald-500 focus:ring-emerald-500 bg-white"
+                    className="w-full h-14 rounded-2xl border-2 border-slate-200 px-4 text-base font-bold text-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 bg-white min-h-[48px]"
                   >
                     {serviceTypes.map((service) => (
                       <option key={service.id} value={service.id}>
@@ -254,11 +228,11 @@ export default function AjukanSuratPage() {
 
                 {/* Info Berkas Layanan */}
                 {selectedService && (
-                  <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200 text-slate-700">
-                    <p className="text-sm font-bold text-emerald-900 mb-1">
-                      Syarat Berkas yang Wajib Disiapkan:
+                  <div className="rounded-2xl bg-emerald-50/70 p-4 border border-emerald-200/80 text-sm font-medium text-emerald-900">
+                    <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
+                      Persyaratan Berkas:
                     </p>
-                    <ul className="list-disc list-inside text-sm text-emerald-800 space-y-1">
+                    <ul className="list-disc list-inside text-xs text-emerald-800 space-y-1 font-semibold">
                       {selectedService.requirements.map((req, idx) => (
                         <li key={idx}>{req}</li>
                       ))}
@@ -268,24 +242,24 @@ export default function AjukanSuratPage() {
 
                 {/* Nama Lengkap */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Nama Lengkap Pemohon <span className="text-red-500">*</span>
                   </label>
                   <Input
                     type="text"
-                    placeholder="Contoh: Budi Santoso"
+                    placeholder="Sesuai KTP (contoh: Budi Santoso)"
                     value={formData.citizenName}
                     onChange={(e) =>
                       setFormData({ ...formData, citizenName: e.target.value })
                     }
-                    className="h-14 rounded-xl border-2 border-slate-200 text-lg placeholder:text-slate-400"
+                    className="h-14 rounded-2xl border-2 border-slate-200 text-base font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 min-h-[48px]"
                     required
                   />
                 </div>
 
                 {/* NIK */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Nomor Induk Kependudukan (NIK - 16 Digit) <span className="text-red-500">*</span>
                   </label>
                   <Input
@@ -299,17 +273,17 @@ export default function AjukanSuratPage() {
                         citizenNik: e.target.value.replace(/\D/g, ""),
                       })
                     }
-                    className="h-14 rounded-xl border-2 border-slate-200 text-lg font-mono placeholder:text-slate-400"
+                    className="h-14 rounded-2xl border-2 border-slate-200 text-base font-mono font-bold placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 min-h-[48px]"
                     required
                   />
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs font-semibold text-slate-500">
                     {formData.citizenNik.length}/16 Digit
                   </p>
                 </div>
 
                 {/* WhatsApp */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Nomor WhatsApp Aktif <span className="text-red-500">*</span>
                   </label>
                   <Input
@@ -322,17 +296,17 @@ export default function AjukanSuratPage() {
                         citizenWhatsapp: e.target.value,
                       })
                     }
-                    className="h-14 rounded-xl border-2 border-slate-200 text-lg placeholder:text-slate-400"
+                    className="h-14 rounded-2xl border-2 border-slate-200 text-base font-mono font-bold placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 min-h-[48px]"
                     required
                   />
                   <p className="mt-1 text-xs text-slate-500">
-                    Nomor ini akan digunakan petugas untuk mengirimkan notifikasi status surat.
+                    Nomor ini akan menerima update notifikasi status permohonan surat.
                   </p>
                 </div>
 
                 {/* Email (Opsional) */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Alamat Email (Opsional)
                   </label>
                   <Input
@@ -342,38 +316,38 @@ export default function AjukanSuratPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, citizenEmail: e.target.value })
                     }
-                    className="h-14 rounded-xl border-2 border-slate-200 text-lg placeholder:text-slate-400"
+                    className="h-14 rounded-2xl border-2 border-slate-200 text-base font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 min-h-[48px]"
                   />
                 </div>
 
                 {/* Keterangan */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Keterangan / Alasan Permohonan
                   </label>
                   <textarea
                     rows={3}
-                    placeholder="Tuliskan keterangan tambahan jika ada..."
+                    placeholder="Tuliskan alasan permohonan surat..."
                     value={formData.notes}
                     onChange={(e) =>
                       setFormData({ ...formData, notes: e.target.value })
                     }
-                    className="w-full rounded-xl border-2 border-slate-200 p-4 text-base placeholder:text-slate-400 focus:border-emerald-500 focus:ring-emerald-500"
+                    className="w-full rounded-2xl border-2 border-slate-200 p-4 text-base font-medium text-slate-900 placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 leading-relaxed"
                   />
                 </div>
 
                 {/* Upload File Attachment */}
                 <div>
-                  <label className="mb-2 block text-base font-bold text-slate-800">
+                  <label className="mb-2 block text-sm font-bold text-slate-900">
                     Unggah Lampiran Berkas (KTP / KK / Surat RT)
                   </label>
-                  <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50/50 p-6 text-center transition-colors hover:bg-emerald-50">
+                  <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50/40 p-6 text-center transition-colors hover:bg-emerald-50">
                     <UploadCloud className="mb-2 h-10 w-10 text-emerald-600" />
-                    <p className="text-base font-semibold text-slate-700">
-                      Klik untuk memilih berkas atau foto
+                    <p className="text-sm font-bold text-slate-800">
+                      Pilih berkas dari perangkat Anda
                     </p>
                     <p className="mt-1 text-xs text-slate-500">
-                      Format disukai: PDF, JPG, PNG (Maks 5 MB)
+                      Format: PDF, JPG, PNG (Maks 5 MB)
                     </p>
                     <input
                       type="file"
@@ -386,10 +360,10 @@ export default function AjukanSuratPage() {
                           });
                         }
                       }}
-                      className="mt-3 text-sm text-slate-600"
+                      className="mt-3 text-xs text-slate-600"
                     />
                     {formData.fileName && (
-                      <p className="mt-2 text-sm font-bold text-emerald-800">
+                      <p className="mt-2 text-xs font-bold text-emerald-800">
                         File Terpilih: {formData.fileName}
                       </p>
                     )}
@@ -400,14 +374,14 @@ export default function AjukanSuratPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-16 w-full gap-2 rounded-2xl bg-emerald-700 text-xl font-bold text-white shadow-xl hover:bg-emerald-800"
+                  className="h-14 w-full gap-2 rounded-2xl bg-emerald-700 text-lg font-extrabold text-white shadow-sm hover:bg-emerald-800 active:scale-[0.98] min-h-[48px]"
                 >
                   {isSubmitting ? (
                     "Mengirimkan Pengajuan..."
                   ) : (
                     <>
-                      Kirimkan Pengajuan Surat
-                      <ArrowRight className="h-6 w-6" />
+                      Kirimkan Permohonan Surat
+                      <ArrowRight className="h-5 w-5" />
                     </>
                   )}
                 </Button>

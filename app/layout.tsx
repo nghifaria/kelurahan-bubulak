@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
@@ -12,16 +12,18 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Kelurahan Bubulak · Portal Informasi & Layanan Digital",
+    default: "Kelurahan Bubulak · Portal Informasi & Layanan Digital Resmi",
     template: "%s · Kelurahan Bubulak",
   },
   description:
-    "Portal resmi informasi dan layanan digital Kelurahan Bubulak, Kecamatan Bogor Barat, Kota Bogor. Cek syarat surat, ajukan layanan online, dan temukan UMKM lokal.",
+    "Portal resmi pelayanan publik digital Kelurahan Bubulak, Kecamatan Bogor Barat, Kota Bogor. Cek syarat surat, ajukan layanan online tanpa antre, dan cek status resi ticket secara real-time.",
   keywords: [
     "Kelurahan Bubulak",
-    "Bogor",
+    "Bogor Barat",
+    "Kota Bogor",
     "layanan kelurahan",
     "syarat surat",
+    "pengajuan surat online",
     "administrasi kependudukan",
   ],
 };
@@ -32,8 +34,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${inter.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+    <html lang="id" className={`${plusJakartaSans.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-slate-50 font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

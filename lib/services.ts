@@ -402,7 +402,7 @@ export async function fetchComplaintByTicket(
 
 export async function uploadImageToInsForge(
   file: File
-): Promise<{ url: string | null; error: any }> {
+): Promise<{ url: string | null; error: unknown }> {
   try {
     const fileExt = file.name.split(".").pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
@@ -477,6 +477,7 @@ export async function updateNewsInDb(
   }
 ) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload: any = {
       title: newsData.title,
       category: newsData.category,
@@ -576,6 +577,7 @@ export async function fetchAllSubmissionsFromDb(): Promise<DbSubmission[]> {
       }));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.map((item: any) => ({
       id: item.id,
       ticketNumber: item.ticket_number,
@@ -661,6 +663,7 @@ export async function fetchAllComplaintsFromDb(): Promise<DbComplaint[]> {
       }));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.map((item: any) => ({
       id: item.id,
       ticketNumber: item.ticket_number,
@@ -722,6 +725,7 @@ export async function fetchAllUmkmFromDb(): Promise<UmkmItem[]> {
 
     if (error || !data || data.length === 0) return fallbackUmkm;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.map((item: any) => ({
       id: item.id,
       businessName: item.business_name,
@@ -785,6 +789,7 @@ export async function updateUmkmInDb(
   }
 ) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload: any = {
       business_name: umkmData.businessName,
       category: umkmData.category,
@@ -918,6 +923,7 @@ export async function updateStaffMemberInDb(
   }
 ) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload: any = {
       name: staffData.name,
       position: staffData.position,
@@ -984,6 +990,7 @@ export async function updateSiteSettingsInDb(settingsData: {
       .limit(1)
       .maybeSingle();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload: any = {
       village_name: settingsData.villageName || "Kelurahan Bubulak",
       lurah_name: settingsData.lurahName,
@@ -1061,6 +1068,7 @@ export async function updateAchievementInDb(
   }
 ) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload: any = {
       title: achievementData.title,
       year: achievementData.year,

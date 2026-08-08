@@ -25,30 +25,23 @@ function CekResiContent() {
   const searchParams = useSearchParams();
   const resiFromUrl = searchParams.get("resi") || "";
 
-  const [query, setQuery] = useState(resiFromUrl);
-  const [activeSearch, setActiveSearch] = useState(resiFromUrl);
+  const [query, setQuery] = useState(() => resiFromUrl);
+  const [activeSearch, setActiveSearch] = useState(() => resiFromUrl);
   const [foundSubmission, setFoundSubmission] = useState<SubmissionTicket | null>(null);
   const [foundComplaint, setFoundComplaint] = useState<ComplaintTicket | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (resiFromUrl) {
-      setQuery(resiFromUrl);
-      setActiveSearch(resiFromUrl);
-    }
-  }, [resiFromUrl]);
+  // derive initial state from URL; avoid setting state synchronously inside effects
 
   useEffect(() => {
     if (!activeSearch.trim()) {
-      setFoundSubmission(null);
-      setFoundComplaint(null);
       return;
     }
 
     let isMounted = true;
-    setIsLoading(true);
 
     async function doSearch() {
+      setIsLoading(true);
       const { fetchSubmissionByTicketOrNik, fetchComplaintByTicket } = await import("@/lib/services");
       const sub = await fetchSubmissionByTicketOrNik(activeSearch);
       const comp = await fetchComplaintByTicket(activeSearch);

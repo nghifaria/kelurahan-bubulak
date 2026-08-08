@@ -41,19 +41,18 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [adminEmail, setAdminEmail] = useState("admin@bubulak.go.id");
+  const [adminEmail, setAdminEmail] = useState(() => {
+    try {
+      return localStorage.getItem("admin_email") || "admin@bubulak.go.id";
+    } catch {
+      return "admin@bubulak.go.id";
+    }
+  });
 
   // Skip layout framing for login page
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
-
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("admin_email");
-    if (savedEmail) {
-      setAdminEmail(savedEmail);
-    }
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("admin_logged_in");

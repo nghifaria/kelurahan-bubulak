@@ -12,13 +12,10 @@ function getWibDate(): Date {
 }
 
 export function OperationalHoursWidget() {
-  const [mounted, setMounted] = useState(false);
-  const [wibDate, setWibDate] = useState<Date | null>(null);
+  const [mounted] = useState(() => typeof window !== "undefined");
+  const [wibDate, setWibDate] = useState<Date>(() => getWibDate());
 
   useEffect(() => {
-    setMounted(true);
-    setWibDate(getWibDate());
-
     const interval = setInterval(() => {
       setWibDate(getWibDate());
     }, 1000);

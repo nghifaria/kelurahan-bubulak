@@ -62,3 +62,71 @@ Gunakan susunan **Bento Grid** untuk mengelompokkan informasi secara visual tanp
    - Hanya gunakan properti Tailwind transition yang aman untuk hardware acceleration: `transition-colors`, `transition-transform`, `opacity-***`, `scale-***`.
 3. **Clean Media Assets**:
    - Semua gambar produk UMKM, foto pegawai, dan sampul berita harus di-load dengan `loading="lazy"` dan batas rasio aspek yang pas.
+
+## 🧩 5. Allowed Stack & Component Patterns
+
+- **Allowed Stack**: Tailwind CSS + shadcn UI + class-variance-authority (`cva`) + `clsx` (+ `@radix-ui` for accessible primitives).
+- **Rationale**: minimal migration, small bundles, predictable utility-driven styling, accessible primitives from Radix when needed.
+
+### Component Variant Pattern (cva)
+Use `cva` to define style variants for primitives. Example `Button` pattern:
+
+```
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
+
+const buttonVariants = cva('inline-flex items-center justify-center rounded-2xl font-bold', {
+  variants: {
+    variant: { default: 'bg-emerald-700 text-white', outline: 'border border-slate-200 bg-white' },
+    size: { default: 'h-12 px-6', sm: 'h-10 px-4' },
+  },
+  defaultVariants: { variant: 'default', size: 'default' },
+})
+
+export function Button({ className, variant, size, ...props }: VariantProps<typeof buttonVariants> & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return <button className={cn(buttonVariants({ variant, size }), className)} {...props} />
+}
+```
+
+### Image Policy
+- Use `next/image` for hero and list thumbnails. Provide `width`/`height` or `fill`.
+- `loading="lazy"` for non-critical images. `priority` only for above-the-fold hero.
+
+### Accessibility Checklist (must pass before PR merge)
+- All images: `alt` present and descriptive.
+- Interactive elements: keyboard focusable, visible focus ring, ARIA roles where needed.
+- Color contrast: WCAG AA for text and UI elements.
+- Touch targets: >= 44x44px on mobile for buttons and primary controls.
+
+### Forbidden
+- Do not use stacked heavy blur effects (e.g., `backdrop-blur-xl`, `backdrop-blur-2xl`) on public pages.
+- Do not import large global animation libraries (e.g., `tw-animate-css`) globally.
+- Avoid inline `style={{}}` for layout-critical rules; prefer utility classes or component props.
+
+### Allowed Blur Pattern (controlled use)
+- Allowed only: small blur `backdrop-blur-sm` or CSS `backdrop-filter: blur(4px)`.
+- Apply blur only on modal/dialog overlays or transient, non-critical surfaces where blur improves focus.
+- Always provide solid/semi-opaque fallback background (e.g., `bg-white/70` or `bg-slate-800/60`) for devices that do not support `backdrop-filter`.
+- Do not stack blur layers; only one backdrop blur layer permitted per stacking context.
+- Ensure foreground text and icons on blurred surfaces meet contrast ratio >= 4.5:1.
+- Prefer opacity + subtle border as alternative on low-end devices. Test on low-end Android emulation.
+
+#### Example: Tailwind overlay pattern
+```
+/* Tailwind classes */
+<div className="fixed inset-0 flex items-center justify-center">
+  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" aria-hidden="true" />
+  <div className="relative z-10 w-full max-w-md p-6 bg-white rounded-2xl shadow-lg">
+    <!-- modal content -->
+  </div>
+</div>
+```
+
+Notes:
+- Use `backdrop-blur-sm` only when modal background needs visual separation.
+- If blur used, increase text/icon weight or add subtle text-shadow for legibility when necessary.
+
+### Migration Note
+- Start with `components/BentoCard.tsx` and `app/page.tsx` as migration examples: convert images to `next/image`, remove inline styles, and adopt `cva` variants for controls.
+
+End of UI Design System additions.

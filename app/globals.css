@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+/* Removed global animation library to reduce CSS payload on low-end devices.
+  Use selective Tailwind animation utilities where strictly needed. */
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));

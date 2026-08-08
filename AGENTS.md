@@ -42,3 +42,10 @@ Setiap kali merombak, membuat, atau memperbaiki komponen UI/UX dan halaman pada 
 - **OPTIMASI HP KENTANG**: Dilarang menggunakan backdrop-blur bertumpuk/berat (`backdrop-blur-xl`), efek 3D berat, atau JS infinite animation yang membebankan HP spesifikasi rendah.
 - **KONTRAST TINGGI**: Pastikan semua teks mudah dibaca oleh warga (WCAG AA).
 - **TOUCH TARGET**: Tombol mobile minimal memiliki area sentuh 44x44px.
+
+### UI Stack & Agent Rules
+- **Allowed Stack**: Tailwind CSS + shadcn UI + cva + clsx (+ Radix for primitives).
+- **Agent Rule**: Before changing UI, read and follow `docs/03_ui_design_system.md`. Update docs when you change component variants or behaviors.
+- **No Global Animations**: Do not reintroduce global animation libraries (e.g., `tw-animate-css`) without explicit performance justification and approval.
+- **No Global Animations**: Do not reintroduce global animation libraries (e.g., `tw-animate-css`) without explicit performance justification and approval.
+- **Controlled Blur**: Agents may use `backdrop-blur-sm` only following `docs/03_ui_design_system.md` Allowed Blur Pattern. Provide fallback backgrounds and verify contrast on mobile.

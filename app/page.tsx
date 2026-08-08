@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Landmark,
   Clock,
@@ -51,16 +52,7 @@ export default async function HomePage() {
       {/* ============================================ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-800 to-slate-900 text-white pt-12 pb-20 sm:pt-16 sm:pb-24">
         {/* Subtle Background Grid Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)",
-              backgroundSize: "28px 28px",
-            }}
-          />
-        </div>
+        <div className="absolute inset-0 bg-grid-pattern opacity-10" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
@@ -301,10 +293,12 @@ export default async function HomePage() {
               >
                 <div className="relative h-44 w-full overflow-hidden bg-slate-900 flex items-center justify-center text-white">
                   {news.coverImageUrl && (news.coverImageUrl.startsWith("http") || news.coverImageUrl.startsWith("/")) ? (
-                    <img
+                    <Image
                       src={news.coverImageUrl}
                       alt={news.title}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      unoptimized
                     />
                   ) : null}
                   <Landmark className="absolute h-14 w-14 text-white/30 -z-10" />

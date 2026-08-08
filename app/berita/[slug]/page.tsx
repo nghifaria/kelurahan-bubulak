@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { fetchNewsBySlug } from "@/lib/services";
 import { RichTextRenderer } from "@/components/RichTextRenderer";
+import Image from "next/image";
 
 function formatDate(dateString: string): string {
   if (!dateString) return "";
@@ -89,10 +90,12 @@ export default async function BeritaDetailPage({ params }: PageProps) {
       <section className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 z-10 -mt-6">
         <div className="mb-6 overflow-hidden rounded-3xl border border-slate-200 bg-slate-900 shadow-sm relative min-h-[220px] flex items-center justify-center text-center">
           {news.coverImageUrl && (news.coverImageUrl.startsWith("http") || news.coverImageUrl.startsWith("/")) ? (
-            <img
+            <Image
               src={news.coverImageUrl}
               alt={news.title}
-              className="w-full max-h-[450px] object-cover"
+              fill
+              className="object-cover"
+              unoptimized
             />
           ) : (
             <div className="p-10 text-center">

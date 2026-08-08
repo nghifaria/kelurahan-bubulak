@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Calendar,
   Sparkles,
@@ -70,10 +71,12 @@ export default async function BeritaListingPage() {
               >
                 <div className="relative h-48 w-full overflow-hidden bg-slate-900 flex items-center justify-center text-white">
                   {news.coverImageUrl && (news.coverImageUrl.startsWith("http") || news.coverImageUrl.startsWith("/")) ? (
-                    <img
+                    <Image
                       src={news.coverImageUrl}
                       alt={news.title}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      unoptimized
                     />
                   ) : null}
                   <Landmark className="absolute h-14 w-14 text-white/30 -z-10" />

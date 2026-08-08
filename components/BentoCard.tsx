@@ -1,6 +1,8 @@
 import React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-interface BentoCardProps {
+interface BentoCardProps extends VariantProps<typeof bentoCardVariants> {
   children: React.ReactNode;
   className?: string;
   colSpan?: string;
@@ -10,19 +12,30 @@ interface BentoCardProps {
   icon?: React.ReactNode;
 }
 
+const bentoCardVariants = cva("group relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white", {
+  variants: {
+    variant: {
+      default: "p-6 shadow-xs hover:border-emerald-300 hover:shadow-md transition-all duration-200",
+      compact: "p-4",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
 export function BentoCard({
   children,
-  className = "",
+  className,
   colSpan = "col-span-1",
   badge,
   title,
   subtitle,
   icon,
+  variant,
 }: BentoCardProps) {
   return (
-    <div
-      className={`group relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs hover:border-emerald-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${colSpan} ${className}`}
-    >
+    <div className={cn(bentoCardVariants({ variant }), colSpan, className)}>
       {(title || badge || icon) && (
         <div className="mb-4 flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">

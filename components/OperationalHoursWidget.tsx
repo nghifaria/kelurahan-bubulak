@@ -12,10 +12,13 @@ function getWibDate(): Date {
 }
 
 export function OperationalHoursWidget() {
-  const [mounted] = useState(() => typeof window !== "undefined");
+  const [mounted, setMounted] = useState(false);
   const [wibDate, setWibDate] = useState<Date>(() => getWibDate());
 
   useEffect(() => {
+    setMounted(true);
+    setWibDate(getWibDate());
+
     const interval = setInterval(() => {
       setWibDate(getWibDate());
     }, 1000);
@@ -131,9 +134,9 @@ export function OperationalHoursWidget() {
             </div>
             <div className="text-left">
               <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
-                <span>{mounted ? dateFormatted : "Waktu WIB"}</span>
+                <span suppressHydrationWarning>{mounted ? dateFormatted : "Waktu WIB"}</span>
               </div>
-              <p className="text-lg font-extrabold text-white font-mono tracking-wider">
+              <p suppressHydrationWarning className="text-lg font-extrabold text-white font-mono tracking-wider">
                 {mounted ? timeFormatted : "--:-- WIB"}
               </p>
             </div>

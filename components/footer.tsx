@@ -17,7 +17,7 @@ export default function Footer() {
       {/* Main Footer Content */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-          {/* Column 1: Branding & Address */}
+          {/* Column 1: Branding, Address & Map */}
           <div className="lg:col-span-2">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-700 text-white shadow-sm ring-1 ring-emerald-600">
@@ -33,27 +33,40 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="mb-4 text-sm leading-relaxed text-slate-400 max-w-lg">
+            <p className="mb-4 text-xs leading-relaxed text-slate-300 max-w-lg font-medium">
               {siteSettings.overviewText}
             </p>
 
-            <div className="mb-6 flex items-start gap-2.5 text-sm text-slate-300">
-              <MapPin className="mt-1 h-4 w-4 shrink-0 text-emerald-500" />
+            <div className="mb-4 flex items-start gap-2.5 text-xs font-semibold text-slate-200">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
               <p>{siteSettings.officeAddress}</p>
             </div>
 
-            {/* Google Maps Public Embed (Zero API Key Method) */}
-            <div className="overflow-hidden rounded-2xl border border-slate-800 shadow-sm">
+            {/* Google Maps Full-Color Interactive Embed (Tanpa Filter Abu-abu / Grayscale) */}
+            <div className="overflow-hidden rounded-2xl border border-slate-800 shadow-md bg-slate-900">
+              <div className="bg-slate-900 px-3 py-2 text-white font-extrabold flex items-center justify-between text-xs border-b border-slate-800">
+                <span className="flex items-center gap-1.5 text-emerald-400">
+                  <MapPin className="h-3.5 w-3.5" /> Peta Lokasi Kantor Kelurahan
+                </span>
+                <a
+                  href={`https://maps.google.com/maps?q=${encodeURIComponent("Kelurahan Bubulak, Bogor Barat, Kota Bogor")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] text-emerald-400 hover:text-white flex items-center gap-1 font-bold"
+                >
+                  Buka Maps <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
               <iframe
                 src="https://maps.google.com/maps?q=Kelurahan+Bubulak,+Bogor+Barat,+Kota+Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 width="100%"
-                height="160"
+                height="220"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Peta Lokasi Kantor Kelurahan Bubulak"
-                className="grayscale opacity-80 hover:opacity-100 transition-opacity"
+                className="w-full h-[220px] block"
               />
             </div>
           </div>

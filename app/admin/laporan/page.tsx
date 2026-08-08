@@ -258,8 +258,9 @@ export default function AdminLaporanPage() {
       {/* MODAL DETAIL & PROCESS COMPLAINT */}
       {/* ============================================ */}
       {selectedComp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" aria-hidden="true" />
+          <div className="relative z-10 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
             <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
                 <p className="text-xs uppercase font-bold text-emerald-700">Detail Laporan Warga</p>

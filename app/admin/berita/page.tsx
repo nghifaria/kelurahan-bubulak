@@ -16,6 +16,7 @@ import {
   Landmark,
   Image as ImageIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -254,13 +255,13 @@ export default function AdminBeritaPage() {
                     <td className="px-6 py-4">
                       <div className="h-14 w-20 overflow-hidden rounded-lg bg-emerald-800 flex items-center justify-center text-white border border-slate-200 relative">
                         {item.coverImageUrl && (item.coverImageUrl.startsWith("http") || item.coverImageUrl.startsWith("/")) ? (
-                          <img
+                          <Image
                             src={item.coverImageUrl}
                             alt={item.title}
+                            width={160}
+                            height={112}
                             className="h-full w-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLElement).style.display = "none";
-                            }}
+                            unoptimized
                           />
                         ) : (
                           <Landmark className="h-6 w-6 text-white/40" />
@@ -321,8 +322,9 @@ export default function AdminBeritaPage() {
       {/* MODAL FORM TAMBAH / EDIT BERITA */}
       {/* ============================================ */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" aria-hidden="true" />
+          <div className="relative z-10 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
             <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
                 <Newspaper className="h-6 w-6 text-emerald-700" />
@@ -508,13 +510,13 @@ export default function AdminBeritaPage() {
 
                   {coverImageUrl && (
                     <div className="mt-4 flex flex-col items-center rounded-xl bg-white p-3 border border-emerald-200 text-xs font-mono text-emerald-900 max-w-md">
-                      <img
+                      <Image
                         src={coverImageUrl}
                         alt="Preview Sampul"
+                        width={176}
+                        height={112}
                         className="h-28 w-44 rounded-lg object-cover border border-slate-200 mb-2"
-                        onError={(e) => {
-                          (e.target as HTMLElement).style.display = "none";
-                        }}
+                        unoptimized
                       />
                       <p className="font-bold text-slate-700 text-left mb-0.5 w-full">Public Storage URL:</p>
                       <p className="truncate w-full">{coverImageUrl}</p>

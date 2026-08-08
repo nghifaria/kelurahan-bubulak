@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Login Card */}
-        <Card className="border-2 border-slate-800 bg-slate-950/80 shadow-2xl backdrop-blur-md">
+        <Card className="border-2 border-slate-800 bg-slate-950/80 shadow-2xl">
           <CardContent className="p-6 sm:p-8">
             {errorMessage && (
               <div className="mb-6 flex items-center gap-3 rounded-xl bg-red-950/80 p-4 border border-red-800 text-red-300 font-semibold text-sm">

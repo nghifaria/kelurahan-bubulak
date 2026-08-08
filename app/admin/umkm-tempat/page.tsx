@@ -17,6 +17,7 @@ import {
   Ban,
   ExternalLink,
 } from "lucide-react";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -353,13 +354,13 @@ export default function AdminUmkmTempatPage() {
                         <td className="px-6 py-4">
                           <div className="h-12 w-16 overflow-hidden rounded-lg bg-amber-800 flex items-center justify-center text-white border border-slate-200 relative">
                             {item.photoUrl && (item.photoUrl.startsWith("http") || item.photoUrl.startsWith("/")) ? (
-                              <img
+                              <Image
                                 src={item.photoUrl}
                                 alt={item.businessName}
+                                width={128}
+                                height={96}
                                 className="h-full w-full object-cover"
-                                onError={(e) => {
-                                  (e.target as HTMLElement).style.display = "none";
-                                }}
+                                unoptimized
                               />
                             ) : (
                               <Store className="h-5 w-5 text-white/40" />
@@ -505,8 +506,9 @@ export default function AdminUmkmTempatPage() {
       {/* MODAL UMKM FORM */}
       {/* ============================================ */}
       {isUmkmModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" aria-hidden="true" />
+          <div className="relative z-10 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
             <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
                 <ShoppingBag className="h-6 w-6 text-amber-600" />
@@ -613,13 +615,13 @@ export default function AdminUmkmTempatPage() {
 
                 {photoUrl && (
                   <div className="mt-3 flex items-center gap-4 rounded-xl bg-white p-3 border border-amber-200">
-                    <img
+                    <Image
                       src={photoUrl}
                       alt="Preview Foto UMKM"
+                      width={112}
+                      height={80}
                       className="h-20 w-28 rounded-lg object-cover border border-slate-200"
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = "none";
-                      }}
+                      unoptimized
                     />
                     <div className="text-xs font-mono text-slate-600 truncate flex-1">
                       <p className="font-bold text-slate-800 font-sans text-sm mb-0.5">Pratinjau Foto Usaha</p>
@@ -657,8 +659,9 @@ export default function AdminUmkmTempatPage() {
       {/* MODAL PUBLIC PLACE FORM */}
       {/* ============================================ */}
       {isPlaceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" aria-hidden="true" />
+          <div className="relative z-10 max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-emerald-300">
             <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
                 <Building className="h-6 w-6 text-emerald-700" />

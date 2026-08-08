@@ -235,8 +235,9 @@ export default function AdminPrestasiPage() {
 
       {/* MODAL FORM PRESTASI */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-amber-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" aria-hidden="true" />
+          <div className="relative z-10 max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-amber-400">
             <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
                 <Trophy className="h-6 w-6 text-amber-500" />
